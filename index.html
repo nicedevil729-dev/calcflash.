@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#4a90e2">
+<title>CalcFlash ⚡</title>
+<style>
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0; }
+html,body{ width:100%; background:#0f0f0f; font-family:Arial,sans-serif; color:white; overflow-x:hidden; }
+.container{ width:100%; padding:8px; }
+.screen{ width:100%; height:52px; background:#000; color:white; font-size:26px; text-align:right; padding:8px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; }
+.buttons{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
+button{ height:50px; border:none; border-radius:11px; background:#2c2c2e; color:white; font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; }
+button:active{ background:#555; }
+.mem{ background:#3a3a3c; color:#aaa; font-size:12px; }
+.op{ color:#4a90e2; font-size:17px; }
+.clr{ color:#4a90e2; }
+.eq{ background:#4a90e2; color:white; grid-row:span 2; height:105px; font-size:22px; }
+.eq:active{ background:#357abd; }
+.section{ margin-top:8px; background:#1c1c1e; border-radius:12px; padding:8px; }
+.section h3{ color:#aaa; font-size:11px; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px; }
+input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:14px; }
+.convert-btn{ background:#4a90e2; color:white; width:100%; padding:8px; font-size:14px; border-radius:9px; border:none; cursor:pointer; }
+.result{ margin-top:5px; background:#000; padding:7px 10px; border-radius:8px; color:#4a90e2; font-size:14px; min-height:30px; text-align:right; }
+.rate-info{ font-size:11px; color:#666; text-align:center; margin-top:4px; }
+.live-badge{ background:#27ae60; color:white; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:5px; }
+.loading{ color:#f39c12; font-size:12px; text-align:center; padding:5px; }
+
+/* Custom Select with Search */
+.custom-select{ position:relative; margin-bottom:5px; }
+.custom-select input.search-box{ width:100%; padding:6px 10px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; }
+.custom-select input.search-box::placeholder{ color:#888; }
+.dropdown-list{ display:none; position:absolute; width:100%; background:#1c1c1e; border:1px solid #4a90e2; border-radius:8px; max-height:180px; overflow-y:auto; z-index:999; top:36px; left:0; }
+.dropdown-list.open{ display:block; }
+.dropdown-item{ padding:8px 10px; cursor:pointer; font-size:13px; border-bottom:1px solid #2c2c2e; }
+.dropdown-item:hover, .dropdown-item.selected{ background:#4a90e2; color:white; }
+.selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid #3a3a3c; background:#2c2c2e; color:white; font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; }
+
+/* Length & Mass selects */
+select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; -webkit-appearance:none; appearance:none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="screen" id="screen">0</div>
+  <div class="buttons">
+    <button class="mem" onclick="memoryClear()">MC</button>
+    <button class="mem" onclick="memoryAdd()">M+</button>
+    <button class="mem" onclick="memorySub()">M-</button>
+    <button class="mem" onclick="memoryRecall()">MR</button>
+    <button class="clr" onclick="clearScreen()">C</button>
+    <button class="op" onclick="press('/')">÷</button>
+    <button class="op" onclick="press('*')">×</button>
+    <button class="op" onclick="backspace()">⌫</button>
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button class="op" onclick="press('-')">−</button>
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button class="op" onclick="press('+')">+</button>
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button class="eq" onclick="calculate()">=</button>
+    <button class="op" onclick="calcPercent()">%</button>
+    <button onclick="press('0')">0</button>
+    <button onclick="press('.')">.</button>
+  </div>
+
+  <!-- Currency Converter -->
+  <div class="section">
+    <h3>💱 Currency Converter <span class="live-badge">LIVE</span></h3>
+    <div class="loading" id="rateStatus">⏳ Rates load ho rahi hain...</div>
+    <input type="number" id="valueCurr" placeholder="Amount daalen" oninput="convertCurrency()">
+
+    <div style="margin-bottom:5px;">
+      <div style="color:#888;font-size:11px;margin-bottom:3px;">From:</div>
+      <div class="custom-select" id="fromWrapper">
+        <button class="selected-display" onclick="toggleDropdown('from')">🇵🇰 PKR - Pakistani Rupee ▼</button>
+        <div class="dropdown-list" id="fromDropdown">
+          <input class="search-box" placeholder="🔍 Search currency..." oninput="filterList('from', this.value)">
+          <div id="fromList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:5px;">
+      <div style="color:#888;font-size:11px;margin-bottom:3px;">To:</div>
+      <div class="custom-select" id="toWrapper">
+        <button class="selected-display" onclick="toggleDropdown('to')">🇺🇸 USD - US Dollar ▼</button>
+        <div class="dropdown-list" id="toDropdown">
+          <input class="search-box" placeholder="🔍 Search currency..." oninput="filterList('to', this.value)">
+          <div id="toList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result" id="resultCurr"></div>
+    <div class="rate-info" id="rateInfo"></div>
+  </div>
+
+  <!-- Length Converter -->
+  <div class="section">
+    <h3>📏 Length Converter</h3>
+    <input type="number" id="valueLen" placeholder="Value daalen">
+    <select id="fromLen"><option>Kilometer</option><option>Meter</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
+    <select id="toLen"><option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
+    <button class="convert-btn" onclick="convertLength()">Convert ▶</button>
+    <div class="result" id="resultLen"></div>
+  </div>
+
+  <!-- Mass Converter -->
+  <div class="section">
+    <h3>⚖️ Mass Converter</h3>
+    <input type="number" id="valueMass" placeholder="Value daalen">
+    <select id="fromMass"><option>Kilogram</option><option>Gram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
+    <select id="toMass"><option>Gram</option><option>Kilogram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
+    <button class="convert-btn" onclick="convertMass()">Convert ▶</button>
+    <div class="result" id="resultMass"></div>
+  </div>
+</div>
+
+<script>
+// All currencies list
+const allCurrencies = [
+  {code:'AED',name:'UAE Dirham',flag:'🇦🇪'},
+  {code:'AFN',name:'Afghan Afghani',flag:'🇦🇫'},
+  {code:'ALL',name:'Albanian Lek',flag:'🇦🇱'},
+  {code:'AMD',name:'Armenian Dram',flag:'🇦🇲'},
+  {code:'ANG',name:'Netherlands Antillean Guilder',flag:'🇳🇱'},
+  {code:'AOA',name:'Angolan Kwanza',flag:'🇦🇴'},
+  {code:'ARS',name:'Argentine Peso',flag:'🇦🇷'},
+  {code:'AUD',name:'Australian Dollar',flag:'🇦🇺'},
+  {code:'AWG',name:'Aruban Florin',flag:'🇦🇼'},
+  {code:'AZN',name:'Azerbaijani Manat',flag:'🇦🇿'},
+  {code:'BAM',name:'Bosnian Mark',flag:'🇧🇦'},
+  {code:'BBD',name:'Barbadian Dollar',flag:'🇧🇧'},
+  {code:'BDT',name:'Bangladeshi Taka',flag:'🇧🇩'},
+  {code:'BGN',name:'Bulgarian Lev',flag:'🇧🇬'},
+  {code:'BHD',name:'Bahraini Dinar',flag:'🇧🇭'},
+  {code:'BIF',name:'Burundian Franc',flag:'🇧🇮'},
+  {code:'BMD',name:'Bermudian Dollar',flag:'🇧🇲'},
+  {code:'BND',name:'Brunei Dollar',flag:'🇧🇳'},
+  {code:'BOB',name:'Bolivian Boliviano',flag:'🇧🇴'},
+  {code:'BRL',name:'Brazilian Real',flag:'🇧🇷'},
+  {code:'BSD',name:'Bahamian Dollar',flag:'🇧🇸'},
+  {code:'BTN',name:'Bhutanese Ngultrum',flag:'🇧🇹'},
+  {code:'BWP',name:'Botswanan Pula',flag:'🇧🇼'},
+  {code:'BYN',name:'Belarusian Ruble',flag:'🇧🇾'},
+  {code:'BZD',name:'Belize Dollar',flag:'🇧🇿'},
+  {code:'CAD',name:'Canadian Dollar',flag:'🇨🇦'},
+  {code:'CDF',name:'Congolese Franc',flag:'🇨🇩'},
+  {code:'CHF',name:'Swiss Franc',flag:'🇨🇭'},
+  {code:'CLP',name:'Chilean Peso',flag:'🇨🇱'},
+  {code:'CNY',name:'Chinese Yuan',flag:'🇨🇳'},
+  {code:'COP',name:'Colombian Peso',flag:'🇨🇴'},
+  {code:'CRC',name:'Costa Rican Colon',flag:'🇨🇷'},
+  {code:'CUP',name:'Cuban Peso',flag:'🇨🇺'},
+  {code:'CVE',name:'Cape Verdean Escudo',flag:'🇨🇻'},
+  {code:'CZK',name:'Czech Koruna',flag:'🇨🇿'},
+  {code:'DJF',name:'Djiboutian Franc',flag:'🇩🇯'},
+  {code:'DKK',name:'Danish Krone',flag:'🇩🇰'},
+  {code:'DOP',name:'Dominican Peso',flag:'🇩🇴'},
+  {code:'DZD',name:'Algerian Dinar',flag:'🇩🇿'},
+  {code:'EGP',name:'Egyptian Pound',flag:'🇪🇬'},
+  {code:'ERN',name:'Eritrean Nakfa',flag:'🇪🇷'},
+  {code:'ETB',name:'Ethiopian Birr',flag:'🇪🇹'},
+  {code:'EUR',name:'Euro',flag:'🇪🇺'},
+  {code:'FJD',name:'Fijian Dollar',flag:'🇫🇯'},
+  {code:'GBP',name:'British Pound',flag:'🇬🇧'},
+  {code:'GEL',name:'Georgian Lari',flag:'🇬🇪'},
+  {code:'GHS',name:'Ghanaian Cedi',flag:'🇬🇭'},
+  {code:'GMD',name:'Gambian Dalasi',flag:'🇬🇲'},
+  {code:'GNF',name:'Guinean Franc',flag:'🇬🇳'},
+  {code:'GTQ',name:'Guatemalan Quetzal',flag:'🇬🇹'},
+  {code:'GYD',name:'Guyanese Dollar',flag:'🇬🇾'},
+  {code:'HKD',name:'Hong Kong Dollar',flag:'🇭🇰'},
+  {code:'HNL',name:'Honduran Lempira',flag:'🇭🇳'},
+  {code:'HRK',name:'Croatian Kuna',flag:'🇭🇷'},
+  {code:'HTG',name:'Haitian Gourde',flag:'🇭🇹'},
+  {code:'HUF',name:'Hungarian Forint',flag:'🇭🇺'},
+  {code:'IDR',name:'Indonesian Rupiah',flag:'🇮🇩'},
+  {code:'ILS',name:'Israeli Shekel',flag:'🇮🇱'},
+  {code:'INR',name:'Indian Rupee',flag:'🇮🇳'},
+  {code:'IQD',name:'Iraqi Dinar',flag:'🇮🇶'},
+  {code:'IRR',name:'Iranian Rial',flag:'🇮🇷'},
+  {code:'ISK',name:'Icelandic Krona',flag:'🇮🇸'},
+  {code:'JMD',name:'Jamaican Dollar',flag:'🇯🇲'},
+  {code:'JOD',name:'Jordanian Dinar',flag:'🇯🇴'},
+  {code:'JPY',name:'Japanese Yen',flag:'🇯🇵'},
+  {code:'KES',name:'Kenyan Shilling',flag:'🇰🇪'},
+  {code:'KGS',name:'Kyrgyzstani Som',flag:'🇰🇬'},
+  {code:'KHR',name:'Cambodian Riel',flag:'🇰🇭'},
+  {code:'KMF',name:'Comorian Franc',flag:'🇰🇲'},
+  {code:'KPW',name:'North Korean Won',flag:'🇰🇵'},
+  {code:'KRW',name:'South Korean Won',flag:'🇰🇷'},
+  {code:'KWD',name:'Kuwaiti Dinar',flag:'🇰🇼'},
+  {code:'KYD',name:'Cayman Islands Dollar',flag:'🇰🇾'},
+  {code:'KZT',name:'Kazakhstani Tenge',flag:'🇰🇿'},
+  {code:'LAK',name:'Laotian Kip',flag:'🇱🇦'},
+  {code:'LBP',name:'Lebanese Pound',flag:'🇱🇧'},
+  {code:'LKR',name:'Sri Lankan Rupee',flag:'🇱🇰'},
+  {code:'LRD',name:'Liberian Dollar',flag:'🇱🇷'},
+  {code:'LSL',name:'Lesotho Loti',flag:'🇱🇸'},
+  {code:'LYD',name:'Libyan Dinar',flag:'🇱🇾'},
+  {code:'MAD',name:'Moroccan Dirham',flag:'🇲🇦'},
+  {code:'MDL',name:'Moldovan Leu',flag:'🇲🇩'},
+  {code:'MGA',name:'Malagasy Ariary',flag:'🇲🇬'},
+  {code:'MKD',name:'Macedonian Denar',flag:'🇲🇰'},
+  {code:'MMK',name:'Myanmar Kyat',flag:'🇲🇲'},
+  {code:'MNT',name:'Mongolian Tugrik',flag:'🇲🇳'},
+  {code:'MOP',name:'Macanese Pataca',flag:'🇲🇴'},
+  {code:'MRU',name:'Mauritanian Ouguiya',flag:'🇲🇷'},
+  {code:'MUR',name:'Mauritian Rupee',flag:'🇲🇺'},
+  {code:'MVR',name:'Maldivian Rufiyaa',flag:'🇲🇻'},
+  {code:'MWK',name:'Malawian Kwacha',flag:'🇲🇼'},
+  {code:'MXN',name:'Mexican Peso',flag:'🇲🇽'},
+  {code:'MYR',name:'Malaysian Ringgit',flag:'🇲🇾'},
+  {code:'MZN',name:'Mozambican Metical',flag:'🇲🇿'},
+  {code:'NAD',name:'Namibian Dollar',flag:'🇳🇦'},
+  {code:'NGN',name:'Nigerian Naira',flag:'🇳🇬'},
+  {code:'NIO',name:'Nicaraguan Cordoba',flag:'🇳🇮'},
+  {code:'NOK',name:'Norwegian Krone',flag:'🇳🇴'},
+  {code:'NPR',name:'Nepalese Rupee',flag:'🇳🇵'},
+  {code:'NZD',name:'New Zealand Dollar',flag:'🇳🇿'},
+  {code:'OMR',name:'Omani Rial',flag:'🇴🇲'},
+  {code:'PAB',name:'Panamanian Balboa',flag:'🇵🇦'},
+  {code:'PEN',name:'Peruvian Sol',flag:'🇵🇪'},
+  {code:'PGK',name:'Papua New Guinean Kina',flag:'🇵🇬'},
+  {code:'PHP',name:'Philippine Peso',flag:'🇵🇭'},
+  {code:'PKR',name:'Pakistani Rupee',flag:'🇵🇰'},
+  {code:'PLN',name:'Polish Zloty',flag:'🇵🇱'},
+  {code:'PYG',name:'Paraguayan Guarani',flag:'🇵🇾'},
+  {code:'QAR',name:'Qatari Riyal',flag:'🇶🇦'},
+  {code:'RON',name:'Romanian Leu',flag:'🇷🇴'},
+  {code:'RSD',name:'Serbian Dinar',flag:'🇷🇸'},
+  {code:'RUB',name:'Russian Ruble',flag:'🇷🇺'},
+  {code:'RWF',name:'Rwandan Franc',flag:'🇷🇼'},
+  {code:'SAR',name:'Saudi Riyal',flag:'🇸🇦'},
+  {code:'SBD',name:'Solomon Islands Dollar',flag:'🇸🇧'},
+  {code:'SCR',name:'Seychellois Rupee',flag:'🇸🇨'},
+  {code:'SDG',name:'Sudanese Pound',flag:'🇸🇩'},
+  {code:'SEK',name:'Swedish Krona',flag:'🇸🇪'},
+  {code:'SGD',name:'Singapore Dollar',flag:'🇸🇬'},
+  {code:'SLL',name:'Sierra Leonean Leone',flag:'🇸🇱'},
+  {code:'SOS',name:'Somali Shilling',flag:'🇸🇴'},
+  {code:'SRD',name:'Surinamese Dollar',flag:'🇸🇷'},
+  {code:'STN',name:'Sao Tomean Dobra',flag:'🇸🇹'},
+  {code:'SVC',name:'Salvadoran Colon',flag:'🇸🇻'},
+  {code:'SYP',name:'Syrian Pound',flag:'🇸🇾'},
+  {code:'SZL',name:'Swazi Lilangeni',flag:'🇸🇿'},
+  {code:'THB',name:'Thai Baht',flag:'🇹🇭'},
+  {code:'TJS',name:'Tajikistani Somoni',flag:'🇹🇯'},
+  {code:'TMT',name:'Turkmenistani Manat',flag:'🇹🇲'},
+  {code:'TND',name:'Tunisian Dinar',flag:'🇹🇳'},
+  {code:'TOP',name:'Tongan Paanga',flag:'🇹🇴'},
+  {code:'TRY',name:'Turkish Lira',flag:'🇹🇷'},
+  {code:'TTD',name:'Trinidad & Tobago Dollar',flag:'🇹🇹'},
+  {code:'TWD',name:'Taiwanese Dollar',flag:'🇹🇼'},
+  {code:'TZS',name:'Tanzanian Shilling',flag:'🇹🇿'},
+  {code:'UAH',name:'Ukrainian Hryvnia',flag:'🇺🇦'},
+  {code:'UGX',name:'Ugandan Shilling',flag:'🇺🇬'},
+  {code:'USD',name:'US Dollar',flag:'🇺🇸'},
+  {code:'UYU',name:'Uruguayan Peso',flag:'🇺🇾'},
+  {code:'UZS',name:'Uzbekistani Som',flag:'🇺🇿'},
+  {code:'VES',name:'Venezuelan Bolivar',flag:'🇻🇪'},
+  {code:'VND',name:'Vietnamese Dong',flag:'🇻🇳'},
+  {code:'VUV',name:'Vanuatu Vatu',flag:'🇻🇺'},
+  {code:'WST',name:'Samoan Tala',flag:'🇼🇸'},
+  {code:'XAF',name:'Central African CFA Franc',flag:'🌍'},
+  {code:'XOF',name:'West African CFA Franc',flag:'🌍'},
+  {code:'YER',name:'Yemeni Rial',flag:'🇾🇪'},
+  {code:'ZAR',name:'South African Rand',flag:'🇿🇦'},
+  {code:'ZMW',name:'Zambian Kwacha',flag:'🇿🇲'},
+  {code:'ZWL',name:'Zimbabwean Dollar',flag:'🇿🇼'},
+];
+
+let selectedFrom = 'PKR';
+let selectedTo = 'USD';
+let rates = {};
+
+function buildList(type, filter=''){
+  const listEl = document.getElementById(type+'List');
+  listEl.innerHTML = '';
+  allCurrencies
+    .filter(c => (c.code+c.name).toLowerCase().includes(filter.toLowerCase()))
+    .forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'dropdown-item' + ((type==='from'?selectedFrom:selectedTo)===c.code?' selected':'');
+      div.innerText = c.flag+' '+c.code+' - '+c.name;
+      div.onclick = ()=>{ selectCurrency(type, c.code, c.flag+' '+c.code+' - '+c.name); };
+      listEl.appendChild(div);
+    });
+}
+
+function toggleDropdown(type){
+  const dd = document.getElementById(type+'Dropdown');
+  document.querySelectorAll('.dropdown-list').forEach(el=>{ if(el!==dd) el.classList.remove('open'); });
+  dd.classList.toggle('open');
+  if(dd.classList.contains('open')){ buildList(type); dd.querySelector('.search-box').focus(); }
+}
+
+function filterList(type, val){ buildList(type, val); }
+
+function selectCurrency(type, code, label){
+  if(type==='from'){ selectedFrom=code; document.querySelector('#fromWrapper .selected-display').innerText=label+' ▼'; }
+  else { selectedTo=code; document.querySelector('#toWrapper .selected-display').innerText=label+' ▼'; }
+  document.getElementById(type+'Dropdown').classList.remove('open');
+  convertCurrency();
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.custom-select')) document.querySelectorAll('.dropdown-list').forEach(el=>el.classList.remove('open'));
+});
+
+async function loadRates(){
+  const apis = [
+    'https://api.frankfurter.app/latest?from=USD',
+    'https://open.er-api.com/v6/latest/USD',
+    'https://api.exchangerate-api.com/v4/latest/USD'
+  ];
+  for(let url of apis){
+    try{
+      let res = await fetch(url);
+      let data = await res.json();
+      // frankfurter uses data.rates differently
+      if(data.rates){
+        rates = data.rates;
+        rates['USD'] = 1;
+        document.getElementById('rateStatus').innerHTML = '✅ Live rates updated!';
+        document.getElementById('rateInfo').innerText = 'Updated: '+new Date().toLocaleTimeString();
+        setTimeout(()=>{ document.getElementById('rateStatus').style.display='none'; },3000);
+        convertCurrency();
+        return;
+      }
+    } catch(e){ continue; }
+  }
+  // All APIs failed - use offline rates
+  document.getElementById('rateStatus').innerHTML = '⚠️ Offline rates use ho rahi hain';
+  rates={USD:1,PKR:278,EUR:0.92,GBP:0.79,AED:3.67,SAR:3.75,INR:83.5,CAD:1.36,AUD:1.53,JPY:149,CNY:7.24,CHF:0.89,KWD:0.31,QAR:3.64,TRY:32.5,BDT:110,MYR:4.7,SGD:1.34,NGN:1550,EGP:48,IQD:1309,IRR:42000,JOD:0.71,LBP:89500,LYD:4.83,MAD:10.1,OMR:0.38,QAR:3.64,TND:3.13,YER:250,DZD:134,EGP:48,SDG:601,ZAR:18.6,NGN:1550,KES:129,GHS:15.3,TZS:2500,UGX:3750,ETB:56,XAF:600,XOF:600,ZMW:26};
+  convertCurrency();
+}
+
+function convertCurrency(){
+  let v=parseFloat(document.getElementById('valueCurr').value);
+  if(isNaN(v)||!rates.USD) return;
+  let inUSD = v/rates[selectedFrom];
+  let result = inUSD*rates[selectedTo];
+  document.getElementById('resultCurr').innerText = result.toFixed(4)+' '+selectedTo;
+  document.getElementById('rateInfo').innerText = '1 '+selectedFrom+' = '+(rates[selectedTo]/rates[selectedFrom]).toFixed(6)+' '+selectedTo;
+}
+
+loadRates();
+setInterval(loadRates, 600000);
+
+// Calculator
+let screenEl=document.getElementById('screen'), input='', memory=0;
+function press(v){ if(input==='0') input=''; input+=v; screenEl.innerText=input; }
+function clearScreen(){ input=''; screenEl.innerText='0'; }
+function backspace(){ input=input.slice(0,-1); if(!input) input='0'; screenEl.innerText=input; }
+function calculate(){ try{ input=parseFloat(eval(input).toFixed(10)).toString(); screenEl.innerText=input; }catch{ screenEl.innerText='Error'; input=''; } }
+function calcPercent(){ try{ input=(parseFloat(input)/100).toString(); screenEl.innerText=input; }catch{} }
+function memoryClear(){ memory=0; }
+function memoryAdd(){ memory+=parseFloat(input)||0; }
+function memorySub(){ memory-=parseFloat(input)||0; }
+function memoryRecall(){ input=memory.toString(); screenEl.innerText=input; }
+
+const meterMap={Kilometer:1000,Meter:1,Centimeter:0.01,Millimeter:0.001,Mile:1609.34,Yard:0.9144,Foot:0.3048,Inch:0.0254};
+function convertLength(){ let v=parseFloat(document.getElementById('valueLen').value); if(isNaN(v)) return; let f=document.getElementById('fromLen').value,t=document.getElementById('toLen').value; document.getElementById('resultLen').innerText=parseFloat((v*meterMap[f]/meterMap[t]).toFixed(10)); }
+
+const kgMap={Kilogram:1,Gram:0.001,Milligram:1e-6,Ton:1000,Pound:0.453592,Ounce:0.0283495};
+function convertMass(){ let v=parseFloat(document.getElementById('valueMass').value); if(isNaN(v)) return; let f=document.getElementById('fromMass').value,t=document.getElementById('toMass').value; document.getElementById('resultMass').innerText=parseFloat((v*kgMap[f]/kgMap[t]).toFixed(10)); }
+</script>
+</body>
+</html>
