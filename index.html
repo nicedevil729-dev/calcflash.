@@ -4,33 +4,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#4a90e2">
-<title>CalcFlash ⚡ - Fixed</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.js"></script>
+<title>CalcFlash ⚡</title>
 <style>
-/* Same CSS as before - no changes needed */
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0; }
 html,body{ width:100%; background:#0f0f0f; font-family:Arial,sans-serif; color:white; overflow-x:hidden; }
 .container{ width:100%; padding:8px; padding-top:4px; }
-/* ... rest of CSS same as original ... */
+.topbar{ display:flex; justify-content:space-between; align-items:center; padding:4px 2px 6px 2px; }
+.topbar-title{ font-size:16px; font-weight:bold; color:#4a90e2; letter-spacing:1px; }
+.dots-btn{ background:none; border:none; color:#aaa; font-size:24px; cursor:pointer; padding:4px 8px; border-radius:8px; height:auto; width:auto; line-height:1; letter-spacing:2px; }
+.dots-btn:active{ background:#2c2c2e; }
+.menu-wrap{ position:relative; }
+.menu-dropdown{ display:none; position:absolute; right:0; top:40px; background:#1c1c1e; border:1px solid #3a3a3c; border-radius:12px; min-width:190px; z-index:1000; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.6); }
+.menu-dropdown.open{ display:block; }
+.menu-item{ padding:13px 16px; font-size:14px; cursor:pointer; border-bottom:1px solid #2c2c2e; display:flex; align-items:center; gap:10px; color:#ddd; }
+.menu-item:last-child{ border-bottom:none; }
+.menu-item:active{ background:#2c2c2e; }
+.menu-item.active{ color:#4a90e2; background:#1a2a3a; }
+.screen-expr{ font-size:12px; color:#555; text-align:right; padding:0 4px 2px 4px; min-height:16px; }
+.screen{ width:100%; min-height:52px; background:#000; color:white; font-size:26px; text-align:right; padding:8px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; line-height:1.3; }
+.buttons{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
+button{ height:50px; border:none; border-radius:11px; background:#2c2c2e; color:white; font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; }
+button:active{ background:#555; }
+.mem{ background:#3a3a3c; color:#aaa; font-size:12px; }
+.op{ color:#4a90e2; font-size:17px; }
+.clr{ color:#ff5f57; }
+.eq{ background:#4a90e2; color:white; grid-row:span 2; height:105px; font-size:22px; }
+.eq:active{ background:#357abd; }
+.sci-row{ display:none; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:5px; }
+.sci{ background:#1a2535; color:#7eb8f7; font-size:12px; height:44px; }
+.sci:active{ background:#2a3f5a; }
+.mode-badge{ display:inline-block; background:#1e2d40; color:#7eb8f7; font-size:10px; padding:2px 8px; border-radius:8px; margin-left:6px; vertical-align:middle; }
+.history-panel{ background:#1c1c1e; border-radius:12px; padding:8px; margin-bottom:8px; display:none; }
+.history-panel.open{ display:block; }
+.history-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.history-header span{ color:#aaa; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
+.history-clear{ background:#3a3a3c; color:#ff5f57; border:none; font-size:11px; padding:4px 10px; border-radius:6px; cursor:pointer; height:auto; width:auto; }
+.history-list{ max-height:180px; overflow-y:auto; }
+.history-item{ padding:8px 10px; border-bottom:1px solid #2c2c2e; cursor:pointer; border-radius:6px; }
+.history-item:active{ background:#2c2c2e; }
+.history-item:last-child{ border-bottom:none; }
+.h-expr{ font-size:12px; color:#666; }
+.h-result{ font-size:16px; color:#4a90e2; text-align:right; }
+.history-empty{ text-align:center; color:#444; font-size:13px; padding:20px; }
+.section{ margin-top:8px; background:#1c1c1e; border-radius:12px; padding:8px; }
+.section h3{ color:#aaa; font-size:11px; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px; }
+input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:14px; }
+.convert-btn{ background:#4a90e2; color:white; width:100%; padding:8px; font-size:14px; border-radius:9px; border:none; cursor:pointer; }
+.result{ margin-top:5px; background:#000; padding:7px 10px; border-radius:8px; color:#4a90e2; font-size:14px; min-height:30px; text-align:right; }
+.rate-info{ font-size:11px; color:#666; text-align:center; margin-top:4px; }
+.live-badge{ background:#27ae60; color:white; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:5px; }
+.loading{ color:#f39c12; font-size:12px; text-align:center; padding:5px; }
+.custom-select{ position:relative; margin-bottom:5px; }
+.custom-select input.search-box{ width:100%; padding:6px 10px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; }
+.custom-select input.search-box::placeholder{ color:#888; }
+.dropdown-list{ display:none; position:absolute; width:100%; background:#1c1c1e; border:1px solid #4a90e2; border-radius:8px; max-height:180px; overflow-y:auto; z-index:999; top:36px; left:0; }
+.dropdown-list.open{ display:block; }
+.dropdown-item{ padding:8px 10px; cursor:pointer; font-size:13px; border-bottom:1px solid #2c2c2e; }
+.dropdown-item:hover,.dropdown-item.selected{ background:#4a90e2; color:white; }
+.selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid #3a3a3c; background:#2c2c2e; color:white; font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; }
+select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; -webkit-appearance:none; appearance:none; }
 </style>
 </head>
 <body>
-<!-- Same HTML structure as before -->
 <div class="container">
-  <!-- Top Bar, History, Screen - SAME -->
+
+  <!-- Top Bar -->
   <div class="topbar">
     <div class="topbar-title">CalcFlash ⚡ <span class="mode-badge" id="modeBadge">Basic</span></div>
     <div class="menu-wrap">
       <button class="dots-btn" onclick="toggleMenu()">•••</button>
       <div class="menu-dropdown" id="menuDropdown">
-        <div class="menu-item active" id="menuBasic" onclick="setMode('basic')">🔢 Basic</div>
-        <div class="menu-item" id="menuSci" onclick="setMode('sci')">🔬 Scientific</div>
-        <div class="menu-item" id="menuHistory" onclick="toggleHistory()">🕘 History</div>
+        <div class="menu-item active" id="menuBasic" onclick="setMode('basic')">🔢 &nbsp;Basic Calculator</div>
+        <div class="menu-item" id="menuSci" onclick="setMode('sci')">🔬 &nbsp;Scientific Calculator</div>
+        <div class="menu-item" id="menuHistory" onclick="toggleHistory()">🕘 &nbsp;History</div>
       </div>
     </div>
   </div>
 
-  <!-- History Panel - SAME -->
+  <!-- History Panel -->
   <div class="history-panel" id="historyPanel">
     <div class="history-header">
       <span>🕘 History</span>
@@ -41,27 +92,27 @@ html,body{ width:100%; background:#0f0f0f; font-family:Arial,sans-serif; color:w
     </div>
   </div>
 
-  <!-- Screen - SAME -->
+  <!-- Screen -->
   <div class="screen-expr" id="screenExpr"></div>
   <div class="screen" id="screen">0</div>
 
-  <!-- FIXED Scientific Row -->
+  <!-- Scientific Row -->
   <div class="sci-row" id="sciRow">
-    <button class="sci" onclick="sciInput('sin(')">sin</button>
-    <button class="sci" onclick="sciInput('cos(')">cos</button>
-    <button class="sci" onclick="sciInput('tan(')">tan</button>
-    <button class="sci" onclick="sciInput('log10(')">log</button>
-    <button class="sci" onclick="sciInput('log(')">ln</button>
-    <button class="sci" onclick="sciInput('sqrt(')">√</button>
-    <button class="sci" onclick="sciInput('square(')">x²</button>
-    <button class="sci" onclick="sciInput('1/(')">1/</button>
-    <button class="sci" onclick="sciInput('pi')">π</button>
-    <button class="sci" onclick="sciInput('e')">e</button>
-    <button class="sci" onclick="sciInput('abs(')">|x|</button>
-    <button class="sci" onclick="sciInput('^(')">xʸ</button>
+    <button class="sci" onclick="sciFunc('sin')">sin</button>
+    <button class="sci" onclick="sciFunc('cos')">cos</button>
+    <button class="sci" onclick="sciFunc('tan')">tan</button>
+    <button class="sci" onclick="sciFunc('log')">log</button>
+    <button class="sci" onclick="sciFunc('ln')">ln</button>
+    <button class="sci" onclick="sciFunc('sqrt')">√x</button>
+    <button class="sci" onclick="sciFunc('sq')">x²</button>
+    <button class="sci" onclick="sciFunc('inv')">1/x</button>
+    <button class="sci" onclick="press('Math.PI')">π</button>
+    <button class="sci" onclick="press('Math.E')">e</button>
+    <button class="sci" onclick="sciFunc('abs')">|x|</button>
+    <button class="sci" onclick="press('**')">xʸ</button>
   </div>
 
-  <!-- Rest of buttons SAME -->
+  <!-- Main Buttons -->
   <div class="buttons">
     <button class="mem" onclick="memoryClear()">MC</button>
     <button class="mem" onclick="memoryAdd()">M+</button>
@@ -88,83 +139,190 @@ html,body{ width:100%; background:#0f0f0f; font-family:Arial,sans-serif; color:w
     <button onclick="press('.')">.</button>
   </div>
 
-  <!-- Converters SAME - Length, Mass, Currency -->
-  <!-- ... same converter sections ... -->
+  <!-- Length Converter -->
+  <div class="section">
+    <h3>📏 Length Converter</h3>
+    <input type="number" id="valueLen" placeholder="Value daalen">
+    <select id="fromLen"><option>Kilometer</option><option>Meter</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
+    <select id="toLen"><option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
+    <button class="convert-btn" onclick="convertLength()">Convert ▶</button>
+    <div class="result" id="resultLen"></div>
+  </div>
+
+  <!-- Mass Converter -->
+  <div class="section">
+    <h3>⚖️ Mass Converter</h3>
+    <input type="number" id="valueMass" placeholder="Value daalen">
+    <select id="fromMass"><option>Kilogram</option><option>Gram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
+    <select id="toMass"><option>Gram</option><option>Kilogram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
+    <button class="convert-btn" onclick="convertMass()">Convert ▶</button>
+    <div class="result" id="resultMass"></div>
+  </div>
+
+  <!-- Currency Converter -->
+  <div class="section">
+    <h3>💱 Currency Converter <span class="live-badge">LIVE</span></h3>
+    <div class="loading" id="rateStatus">⏳ Rates load ho rahi hain...</div>
+    <input type="number" id="valueCurr" placeholder="Amount daalen" oninput="convertCurrency()">
+    <div style="margin-bottom:5px;">
+      <div style="color:#888;font-size:11px;margin-bottom:3px;">From:</div>
+      <div class="custom-select" id="fromWrapper">
+        <button class="selected-display" onclick="toggleDropdown('from')">🇵🇰 PKR - Pakistani Rupee ▼</button>
+        <div class="dropdown-list" id="fromDropdown">
+          <input class="search-box" placeholder="🔍 Search currency..." oninput="filterList('from', this.value)">
+          <div id="fromList"></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:5px;">
+      <div style="color:#888;font-size:11px;margin-bottom:3px;">To:</div>
+      <div class="custom-select" id="toWrapper">
+        <button class="selected-display" onclick="toggleDropdown('to')">🇺🇸 USD - US Dollar ▼</button>
+        <div class="dropdown-list" id="toDropdown">
+          <input class="search-box" placeholder="🔍 Search currency..." oninput="filterList('to', this.value)">
+          <div id="toList"></div>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="resultCurr"></div>
+    <div class="rate-info" id="rateInfo"></div>
+  </div>
+
 </div>
-
 <script>
-// FIXED JAVASCRIPT - Scientific Calculator PERFECT!
-let screenEl=document.getElementById('screen'),screenExprEl=document.getElementById('screenExpr'),input='',memory=0;
-let historyData=[],historyOpen=false,currentMode='basic',menuOpen=false;
-
-// MENU & HISTORY FUNCTIONS - SAME
-function toggleMenu(){menuOpen=!menuOpen;document.getElementById('menuDropdown').classList.toggle('open',menuOpen);}
+// MENU
+let menuOpen=false;
+function toggleMenu(){
+  menuOpen=!menuOpen;
+  document.getElementById('menuDropdown').classList.toggle('open',menuOpen);
+}
 document.addEventListener('click',e=>{
   if(!e.target.closest('.menu-wrap')){menuOpen=false;document.getElementById('menuDropdown').classList.remove('open');}
+  if(!e.target.closest('.custom-select')) document.querySelectorAll('.dropdown-list').forEach(el=>el.classList.remove('open'));
 });
+
+// MODE
+let currentMode='basic';
 function setMode(mode){
-  currentMode=mode; document.getElementById('menuDropdown').classList.remove('open');
-  document.getElementById('sciRow').style.display=(mode==='sci')?'grid':'none';
+  currentMode=mode;
+  document.getElementById('menuDropdown').classList.remove('open'); menuOpen=false;
+  const sciRow=document.getElementById('sciRow');
+  sciRow.style.display=(mode==='sci')?'grid':'none';
   document.getElementById('modeBadge').innerText=(mode==='sci')?'Scientific':'Basic';
   document.getElementById('menuBasic').classList.toggle('active',mode==='basic');
   document.getElementById('menuSci').classList.toggle('active',mode==='sci');
 }
-function toggleHistory(){historyOpen=!historyOpen;document.getElementById('historyPanel').classList.toggle('open',historyOpen);renderHistory();}
-function addToHistory(expr,result){if(!expr||expr==='0'||result==='Error')return;historyData.unshift({expr,result,time:new Date().toLocaleTimeString()});if(historyData.length>50)historyData.pop();if(historyOpen)renderHistory();}
-function renderHistory(){const list=document.getElementById('historyList');if(!historyData.length){list.innerHTML='<div class="history-empty">Abhi koi history nahi hai</div>';return;}list.innerHTML=historyData.map((h,i)=>`<div class="history-item" onclick="useHistory(${i})"><div class="h-expr">${h.expr}</div><div class="h-result">= ${h.result} <span style="font-size:10px;color:#444;">${h.time}</span></div></div>`).join('');}
-function useHistory(i){input=historyData[i].result;screenEl.innerText=input;screenExprEl.innerText=historyData[i].expr+' =';}
-function clearHistory(){historyData=[];renderHistory();}
 
-// ✅ FIXED CALCULATOR FUNCTIONS
-function press(v){if(input==='0')input='';input+=v;updateDisplay();}
-function clearScreen(){input='';screenEl.innerText='0';screenExprEl.innerText='';}
-function backspace(){input=input.slice(0,-1)||'0';updateDisplay();}
-function updateDisplay(){screenEl.innerText=input.replace(/\*\*/g,'^').replace(/pi/g,'π').replace(/e/g,'e');}
+// HISTORY
+let historyData=[],historyOpen=false;
+function toggleHistory(){
+  historyOpen=!historyOpen;
+  document.getElementById('historyPanel').classList.toggle('open',historyOpen);
+  document.getElementById('menuHistory').classList.toggle('active',historyOpen);
+  document.getElementById('menuDropdown').classList.remove('open'); menuOpen=false;
+  renderHistory();
+}
+function addToHistory(expr,result){
+  if(!expr||expr==='0'||result==='Error') return;
+  historyData.unshift({expr,result,time:new Date().toLocaleTimeString()});
+  if(historyData.length>50) historyData.pop();
+  if(historyOpen) renderHistory();
+}
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  if(!historyData.length){list.innerHTML='<div class="history-empty">Abhi koi history nahi hai</div>';return;}
+  list.innerHTML=historyData.map((h,i)=>`<div class="history-item" onclick="useHistory(${i})"><div class="h-expr">${h.expr}</div><div class="h-result">= ${h.result} <span style="font-size:10px;color:#444;">${h.time}</span></div></div>`).join('');
+}
+function useHistory(i){
+  input=historyData[i].result;
+  screenEl.innerText=input;
+  document.getElementById('screenExpr').innerText=historyData[i].expr+' =';
+}
+function clearHistory(){ historyData=[]; renderHistory(); }
 
-// 🔥 PERFECT SCIENTIFIC CALCULATION
+// CALCULATOR
+let screenEl=document.getElementById('screen'),input='',memory=0;
+function press(v){
+  if(input==='0'||input==='') input='';
+  input+=v;
+  screenEl.innerText=input.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
+  document.getElementById('screenExpr').innerText='';
+}
+function clearScreen(){ input=''; screenEl.innerText='0'; document.getElementById('screenExpr').innerText=''; }
+function backspace(){ input=input.slice(0,-1); if(!input) input='0'; screenEl.innerText=input.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e'); }
 function calculate(){
-  try {
-    // Clean input for math.js
-    let cleanInput = input
-      .replace(/×/g, '*')
-      .replace(/÷/g, '/')
-      .replace(/\^/g, '**')
-      .replace(/π/g, 'pi')
-      .replace(/e/g, 'e');
-    
-    // Use math.js for perfect calculation
-    let result = math.evaluate(cleanInput);
-    result = math.format(result, {precision: 10});
-    
-    addToHistory(input, result);
-    screenExprEl.innerText = input + ' =';
-    input = result;
-    screenEl.innerText = result;
-  } catch(e) {
-    screenEl.innerText = 'Error';
-    input = '';
-  }
+  try{
+    let displayExpr=input.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
+    let result=parseFloat(eval(input).toFixed(10)).toString();
+    addToHistory(displayExpr,result);
+    document.getElementById('screenExpr').innerText=displayExpr+' =';
+    input=result; screenEl.innerText=result;
+  } catch{ screenEl.innerText='Error'; input=''; }
+}
+function calcPercent(){
+  try{
+    let result=(parseFloat(input)/100).toString();
+    addToHistory(input+'%',result);
+    input=result; screenEl.innerText=input;
+  } catch{}
+}
+function memoryClear(){ memory=0; }
+function memoryAdd(){ memory+=parseFloat(input)||0; }
+function memorySub(){ memory-=parseFloat(input)||0; }
+function memoryRecall(){ input=memory.toString(); screenEl.innerText=input; }
+
+// SCIENTIFIC
+function sciFunc(fn){
+  let val=parseFloat(input);
+  if(isNaN(val)){screenEl.innerText='Error';return;}
+  let result,displayExpr;
+  try{
+    switch(fn){
+      case 'sin': result=Math.sin(val*Math.PI/180); displayExpr=`sin(${val}°)`; break;
+      case 'cos': result=Math.cos(val*Math.PI/180); displayExpr=`cos(${val}°)`; break;
+      case 'tan': result=Math.tan(val*Math.PI/180); displayExpr=`tan(${val}°)`; break;
+      case 'log': result=Math.log10(val); displayExpr=`log(${val})`; break;
+      case 'ln':  result=Math.log(val);   displayExpr=`ln(${val})`; break;
+      case 'sqrt':result=Math.sqrt(val);  displayExpr=`√(${val})`; break;
+      case 'sq':  result=val*val;         displayExpr=`${val}²`; break;
+      case 'inv': result=1/val;           displayExpr=`1/${val}`; break;
+      case 'abs': result=Math.abs(val);   displayExpr=`|${val}|`; break;
+    }
+    result=parseFloat(result.toFixed(10)).toString();
+    addToHistory(displayExpr,result);
+    document.getElementById('screenExpr').innerText=displayExpr+' =';
+    input=result; screenEl.innerText=result;
+  } catch{ screenEl.innerText='Error'; input=''; }
 }
 
-// ✅ NEW SCIENTIFIC INPUT FUNCTION
-function sciInput(func) {
-  if (input === '0' || input === 'Error') input = '';
-  input += func;
-  updateDisplay();
+// CONVERTERS
+const meterMap={Kilometer:1000,Meter:1,Centimeter:0.01,Millimeter:0.001,Mile:1609.34,Yard:0.9144,Foot:0.3048,Inch:0.0254};
+function convertLength(){let v=parseFloat(document.getElementById('valueLen').value);if(isNaN(v))return;let f=document.getElementById('fromLen').value,t=document.getElementById('toLen').value;document.getElementById('resultLen').innerText=parseFloat((v*meterMap[f]/meterMap[t]).toFixed(10));}
+const kgMap={Kilogram:1,Gram:0.001,Milligram:1e-6,Ton:1000,Pound:0.453592,Ounce:0.0283495};
+function convertMass(){let v=parseFloat(document.getElementById('valueMass').value);if(isNaN(v))return;let f=document.getElementById('fromMass').value,t=document.getElementById('toMass').value;document.getElementById('resultMass').innerText=parseFloat((v*kgMap[f]/kgMap[t]).toFixed(10));}
+
+// CURRENCY
+const allCurrencies=[{code:'AED',name:'UAE Dirham',flag:'🇦🇪'},{code:'AFN',name:'Afghan Afghani',flag:'🇦🇫'},{code:'ALL',name:'Albanian Lek',flag:'🇦🇱'},{code:'AMD',name:'Armenian Dram',flag:'🇦🇲'},{code:'ANG',name:'Netherlands Antillean Guilder',flag:'🇳🇱'},{code:'AOA',name:'Angolan Kwanza',flag:'🇦🇴'},{code:'ARS',name:'Argentine Peso',flag:'🇦🇷'},{code:'AUD',name:'Australian Dollar',flag:'🇦🇺'},{code:'AWG',name:'Aruban Florin',flag:'🇦🇼'},{code:'AZN',name:'Azerbaijani Manat',flag:'🇦🇿'},{code:'BAM',name:'Bosnian Mark',flag:'🇧🇦'},{code:'BBD',name:'Barbadian Dollar',flag:'🇧🇧'},{code:'BDT',name:'Bangladeshi Taka',flag:'🇧🇩'},{code:'BGN',name:'Bulgarian Lev',flag:'🇧🇬'},{code:'BHD',name:'Bahraini Dinar',flag:'🇧🇭'},{code:'BIF',name:'Burundian Franc',flag:'🇧🇮'},{code:'BMD',name:'Bermudian Dollar',flag:'🇧🇲'},{code:'BND',name:'Brunei Dollar',flag:'🇧🇳'},{code:'BOB',name:'Bolivian Boliviano',flag:'🇧🇴'},{code:'BRL',name:'Brazilian Real',flag:'🇧🇷'},{code:'BSD',name:'Bahamian Dollar',flag:'🇧🇸'},{code:'BTN',name:'Bhutanese Ngultrum',flag:'🇧🇹'},{code:'BWP',name:'Botswanan Pula',flag:'🇧🇼'},{code:'BYN',name:'Belarusian Ruble',flag:'🇧🇾'},{code:'BZD',name:'Belize Dollar',flag:'🇧🇿'},{code:'CAD',name:'Canadian Dollar',flag:'🇨🇦'},{code:'CDF',name:'Congolese Franc',flag:'🇨🇩'},{code:'CHF',name:'Swiss Franc',flag:'🇨🇭'},{code:'CLP',name:'Chilean Peso',flag:'🇨🇱'},{code:'CNY',name:'Chinese Yuan',flag:'🇨🇳'},{code:'COP',name:'Colombian Peso',flag:'🇨🇴'},{code:'CRC',name:'Costa Rican Colon',flag:'🇨🇷'},{code:'CUP',name:'Cuban Peso',flag:'🇨🇺'},{code:'CVE',name:'Cape Verdean Escudo',flag:'🇨🇻'},{code:'CZK',name:'Czech Koruna',flag:'🇨🇿'},{code:'DJF',name:'Djiboutian Franc',flag:'🇩🇯'},{code:'DKK',name:'Danish Krone',flag:'🇩🇰'},{code:'DOP',name:'Dominican Peso',flag:'🇩🇴'},{code:'DZD',name:'Algerian Dinar',flag:'🇩🇿'},{code:'EGP',name:'Egyptian Pound',flag:'🇪🇬'},{code:'ERN',name:'Eritrean Nakfa',flag:'🇪🇷'},{code:'ETB',name:'Ethiopian Birr',flag:'🇪🇹'},{code:'EUR',name:'Euro',flag:'🇪🇺'},{code:'FJD',name:'Fijian Dollar',flag:'🇫🇯'},{code:'GBP',name:'British Pound',flag:'🇬🇧'},{code:'GEL',name:'Georgian Lari',flag:'🇬🇪'},{code:'GHS',name:'Ghanaian Cedi',flag:'🇬🇭'},{code:'GMD',name:'Gambian Dalasi',flag:'🇬🇲'},{code:'GNF',name:'Guinean Franc',flag:'🇬🇳'},{code:'GTQ',name:'Guatemalan Quetzal',flag:'🇬🇹'},{code:'GYD',name:'Guyanese Dollar',flag:'🇬🇾'},{code:'HKD',name:'Hong Kong Dollar',flag:'🇭🇰'},{code:'HNL',name:'Honduran Lempira',flag:'🇭🇳'},{code:'HRK',name:'Croatian Kuna',flag:'🇭🇷'},{code:'HTG',name:'Haitian Gourde',flag:'🇭🇹'},{code:'HUF',name:'Hungarian Forint',flag:'🇭🇺'},{code:'IDR',name:'Indonesian Rupiah',flag:'🇮🇩'},{code:'ILS',name:'Israeli Shekel',flag:'🇮🇱'},{code:'INR',name:'Indian Rupee',flag:'🇮🇳'},{code:'IQD',name:'Iraqi Dinar',flag:'🇮🇶'},{code:'IRR',name:'Iranian Rial',flag:'🇮🇷'},{code:'ISK',name:'Icelandic Krona',flag:'🇮🇸'},{code:'JMD',name:'Jamaican Dollar',flag:'🇯🇲'},{code:'JOD',name:'Jordanian Dinar',flag:'🇯🇴'},{code:'JPY',name:'Japanese Yen',flag:'🇯🇵'},{code:'KES',name:'Kenyan Shilling',flag:'🇰🇪'},{code:'KGS',name:'Kyrgyzstani Som',flag:'🇰🇬'},{code:'KHR',name:'Cambodian Riel',flag:'🇰🇭'},{code:'KMF',name:'Comorian Franc',flag:'🇰🇲'},{code:'KPW',name:'North Korean Won',flag:'🇰🇵'},{code:'KRW',name:'South Korean Won',flag:'🇰🇷'},{code:'KWD',name:'Kuwaiti Dinar',flag:'🇰🇼'},{code:'KYD',name:'Cayman Islands Dollar',flag:'🇰🇾'},{code:'KZT',name:'Kazakhstani Tenge',flag:'🇰🇿'},{code:'LAK',name:'Laotian Kip',flag:'🇱🇦'},{code:'LBP',name:'Lebanese Pound',flag:'🇱🇧'},{code:'LKR',name:'Sri Lankan Rupee',flag:'🇱🇰'},{code:'LRD',name:'Liberian Dollar',flag:'🇱🇷'},{code:'LSL',name:'Lesotho Loti',flag:'🇱🇸'},{code:'LYD',name:'Libyan Dinar',flag:'🇱🇾'},{code:'MAD',name:'Moroccan Dirham',flag:'🇲🇦'},{code:'MDL',name:'Moldovan Leu',flag:'🇲🇩'},{code:'MGA',name:'Malagasy Ariary',flag:'🇲🇬'},{code:'MKD',name:'Macedonian Denar',flag:'🇲🇰'},{code:'MMK',name:'Myanmar Kyat',flag:'🇲🇲'},{code:'MNT',name:'Mongolian Tugrik',flag:'🇲🇳'},{code:'MOP',name:'Macanese Pataca',flag:'🇲🇴'},{code:'MRU',name:'Mauritanian Ouguiya',flag:'🇲🇷'},{code:'MUR',name:'Mauritian Rupee',flag:'🇲🇺'},{code:'MVR',name:'Maldivian Rufiyaa',flag:'🇲🇻'},{code:'MWK',name:'Malawian Kwacha',flag:'🇲🇼'},{code:'MXN',name:'Mexican Peso',flag:'🇲🇽'},{code:'MYR',name:'Malaysian Ringgit',flag:'🇲🇾'},{code:'MZN',name:'Mozambican Metical',flag:'🇲🇿'},{code:'NAD',name:'Namibian Dollar',flag:'🇳🇦'},{code:'NGN',name:'Nigerian Naira',flag:'🇳🇬'},{code:'NIO',name:'Nicaraguan Cordoba',flag:'🇳🇮'},{code:'NOK',name:'Norwegian Krone',flag:'🇳🇴'},{code:'NPR',name:'Nepalese Rupee',flag:'🇳🇵'},{code:'NZD',name:'New Zealand Dollar',flag:'🇳🇿'},{code:'OMR',name:'Omani Rial',flag:'🇴🇲'},{code:'PAB',name:'Panamanian Balboa',flag:'🇵🇦'},{code:'PEN',name:'Peruvian Sol',flag:'🇵🇪'},{code:'PGK',name:'Papua New Guinean Kina',flag:'🇵🇬'},{code:'PHP',name:'Philippine Peso',flag:'🇵🇭'},{code:'PKR',name:'Pakistani Rupee',flag:'🇵🇰'},{code:'PLN',name:'Polish Zloty',flag:'🇵🇱'},{code:'PYG',name:'Paraguayan Guarani',flag:'🇵🇾'},{code:'QAR',name:'Qatari Riyal',flag:'🇶🇦'},{code:'RON',name:'Romanian Leu',flag:'🇷🇴'},{code:'RSD',name:'Serbian Dinar',flag:'🇷🇸'},{code:'RUB',name:'Russian Ruble',flag:'🇷🇺'},{code:'RWF',name:'Rwandan Franc',flag:'🇷🇼'},{code:'SAR',name:'Saudi Riyal',flag:'🇸🇦'},{code:'SBD',name:'Solomon Islands Dollar',flag:'🇸🇧'},{code:'SCR',name:'Seychellois Rupee',flag:'🇸🇨'},{code:'SDG',name:'Sudanese Pound',flag:'🇸🇩'},{code:'SEK',name:'Swedish Krona',flag:'🇸🇪'},{code:'SGD',name:'Singapore Dollar',flag:'🇸🇬'},{code:'SLL',name:'Sierra Leonean Leone',flag:'🇸🇱'},{code:'SOS',name:'Somali Shilling',flag:'🇸🇴'},{code:'SRD',name:'Surinamese Dollar',flag:'🇸🇷'},{code:'STN',name:'Sao Tomean Dobra',flag:'🇸🇹'},{code:'SVC',name:'Salvadoran Colon',flag:'🇸🇻'},{code:'SYP',name:'Syrian Pound',flag:'🇸🇾'},{code:'SZL',name:'Swazi Lilangeni',flag:'🇸🇿'},{code:'THB',name:'Thai Baht',flag:'🇹🇭'},{code:'TJS',name:'Tajikistani Somoni',flag:'🇹🇯'},{code:'TMT',name:'Turkmenistani Manat',flag:'🇹🇲'},{code:'TND',name:'Tunisian Dinar',flag:'🇹🇳'},{code:'TOP',name:'Tongan Paanga',flag:'🇹🇴'},{code:'TRY',name:'Turkish Lira',flag:'🇹🇷'},{code:'TTD',name:'Trinidad & Tobago Dollar',flag:'🇹🇹'},{code:'TWD',name:'Taiwanese Dollar',flag:'🇹🇼'},{code:'TZS',name:'Tanzanian Shilling',flag:'🇹🇿'},{code:'UAH',name:'Ukrainian Hryvnia',flag:'🇺🇦'},{code:'UGX',name:'Ugandan Shilling',flag:'🇺🇬'},{code:'USD',name:'US Dollar',flag:'🇺🇸'},{code:'UYU',name:'Uruguayan Peso',flag:'🇺🇾'},{code:'UZS',name:'Uzbekistani Som',flag:'🇺🇿'},{code:'VES',name:'Venezuelan Bolivar',flag:'🇻🇪'},{code:'VND',name:'Vietnamese Dong',flag:'🇻🇳'},{code:'VUV',name:'Vanuatu Vatu',flag:'🇻🇺'},{code:'WST',name:'Samoan Tala',flag:'🇼🇸'},{code:'XAF',name:'Central African CFA Franc',flag:'🌍'},{code:'XOF',name:'West African CFA Franc',flag:'🌍'},{code:'YER',name:'Yemeni Rial',flag:'🇾🇪'},{code:'ZAR',name:'South African Rand',flag:'🇿🇦'},{code:'ZMW',name:'Zambian Kwacha',flag:'🇿🇲'},{code:'ZWL',name:'Zimbabwean Dollar',flag:'🇿🇼'}];
+let selectedFrom='PKR',selectedTo='USD',rates={};
+function buildList(type,filter=''){
+  const listEl=document.getElementById(type+'List');listEl.innerHTML='';
+  allCurrencies.filter(c=>(c.code+c.name).toLowerCase().includes(filter.toLowerCase())).forEach(c=>{
+    const div=document.createElement('div');div.className='dropdown-item'+((type==='from'?selectedFrom:selectedTo)===c.code?' selected':'');
+    div.innerText=c.flag+' '+c.code+' - '+c.name;div.onclick=()=>{selectCurrency(type,c.code,c.flag+' '+c.code+' - '+c.name);};listEl.appendChild(div);
+  });
 }
-
-// Memory functions - SAME
-function memoryClear(){memory=0;}
-function memoryAdd(){memory+=parseFloat(input)||0;}
-function memorySub(){memory-=parseFloat(input)||0;}
-function memoryRecall(){input=memory.toString();screenEl.innerText=input;updateDisplay();}
-function calcPercent(){try{let result=(parseFloat(input)/100).toString();addToHistory(input+'%',result);input=result;screenEl.innerText=input;}catch{}}
-
-// CONVERTERS - SAME AS BEFORE (Length, Mass, Currency)
-// ... paste the converter functions from original code ...
-
-// Initialize
-setMode('basic');
+function toggleDropdown(type){const dd=document.getElementById(type+'Dropdown');document.querySelectorAll('.dropdown-list').forEach(el=>{if(el!==dd)el.classList.remove('open');});dd.classList.toggle('open');if(dd.classList.contains('open')){buildList(type);dd.querySelector('.search-box').focus();}}
+function filterList(type,val){buildList(type,val);}
+function selectCurrency(type,code,label){if(type==='from'){selectedFrom=code;document.querySelector('#fromWrapper .selected-display').innerText=label+' ▼';}else{selectedTo=code;document.querySelector('#toWrapper .selected-display').innerText=label+' ▼';}document.getElementById(type+'Dropdown').classList.remove('open');convertCurrency();}
+async function loadRates(){
+  const apis=['https://api.frankfurter.app/latest?from=USD','https://open.er-api.com/v6/latest/USD','https://api.exchangerate-api.com/v4/latest/USD'];
+  for(let url of apis){try{let res=await fetch(url);let data=await res.json();if(data.rates){rates=data.rates;rates['USD']=1;document.getElementById('rateStatus').innerHTML='✅ Live rates updated!';document.getElementById('rateInfo').innerText='Updated: '+new Date().toLocaleTimeString();setTimeout(()=>{document.getElementById('rateStatus').style.display='none';},3000);convertCurrency();return;}}catch(e){continue;}}
+  document.getElementById('rateStatus').innerHTML='⚠️ Offline rates use ho rahi hain';
+  rates={USD:1,PKR:278,EUR:0.92,GBP:0.79,AED:3.67,SAR:3.75,INR:83.5,CAD:1.36,AUD:1.53,JPY:149,CNY:7.24,CHF:0.89,KWD:0.31,QAR:3.64,TRY:32.5,BDT:110,MYR:4.7,SGD:1.34,NGN:1550,EGP:48,IQD:1309,IRR:42000,JOD:0.71,LBP:89500,LYD:4.83,MAD:10.1,OMR:0.38,TND:3.13,YER:250,DZD:134,SDG:601,ZAR:18.6,KES:129,GHS:15.3,TZS:2500,UGX:3750,ETB:56,XAF:600,XOF:600,ZMW:26};
+  convertCurrency();
+}
+function convertCurrency(){let v=parseFloat(document.getElementById('valueCurr').value);if(isNaN(v)||!rates.USD)return;let inUSD=v/rates[selectedFrom];let result=inUSD*rates[selectedTo];document.getElementById('resultCurr').innerText=result.toFixed(4)+' '+selectedTo;document.getElementById('rateInfo').innerText='1 '+selectedFrom+' = '+(rates[selectedTo]/rates[selectedFrom]).toFixed(6)+' '+selectedTo;}
+loadRates();setInterval(loadRates,600000);
 </script>
 </body>
 </html>
