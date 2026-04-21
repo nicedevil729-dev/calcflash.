@@ -30,6 +30,7 @@ button:active{ background:#555; }
 .clr{ color:#ff5f57; }
 .eq{ background:#4a90e2; color:white; grid-row:span 2; height:105px; font-size:22px; }
 .eq:active{ background:#357abd; }
+/* FIX: sci-row default hidden, shown via JS */
 .sci-row{ display:none; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:5px; }
 .sci{ background:#1a2535; color:#7eb8f7; font-size:12px; height:44px; }
 .sci:active{ background:#2a3f5a; }
@@ -106,8 +107,8 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sci" onclick="sciFunc('sqrt')">√x</button>
     <button class="sci" onclick="sciFunc('sq')">x²</button>
     <button class="sci" onclick="sciFunc('inv')">1/x</button>
-    <button class="sci" onclick="press('Math.PI')">π</button>
-    <button class="sci" onclick="press('Math.E')">e</button>
+    <button class="sci" onclick="insertConst('pi')">π</button>
+    <button class="sci" onclick="insertConst('e')">e</button>
     <button class="sci" onclick="sciFunc('abs')">|x|</button>
     <button class="sci" onclick="press('**')">xʸ</button>
   </div>
@@ -207,6 +208,7 @@ function setMode(mode){
   currentMode=mode;
   document.getElementById('menuDropdown').classList.remove('open'); menuOpen=false;
   const sciRow=document.getElementById('sciRow');
+  // FIX: properly toggle display between grid and none
   sciRow.style.display=(mode==='sci')?'grid':'none';
   document.getElementById('modeBadge').innerText=(mode==='sci')?'Scientific':'Basic';
   document.getElementById('menuBasic').classList.toggle('active',mode==='basic');
@@ -242,25 +244,47 @@ function clearHistory(){ historyData=[]; renderHistory(); }
 
 // CALCULATOR
 let screenEl=document.getElementById('screen'),input='',memory=0;
+
+function getDisplayText(val){
+  return val.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
+}
+
 function press(v){
-  if(input==='0'||input==='') input='';
+  // FIX: allow chaining — don't wipe if input was a previous result unless it's '0'
+  if(input==='0') input='';
   input+=v;
-  screenEl.innerText=input.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
+  screenEl.innerText=getDisplayText(input);
   document.getElementById('screenExpr').innerText='';
 }
+
+// FIX: separate function for inserting constants (π, e) so they don't get wiped
+function insertConst(c){
+  if(input==='0') input='';
+  if(c==='pi') input+=String(Math.PI);
+  else if(c==='e') input+=String(Math.E);
+  screenEl.innerText=getDisplayText(input);
+  document.getElementById('screenExpr').innerText='';
+}
+
 function clearScreen(){ input=''; screenEl.innerText='0'; document.getElementById('screenExpr').innerText=''; }
-function backspace(){ input=input.slice(0,-1); if(!input) input='0'; screenEl.innerText=input.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e'); }
+function backspace(){ 
+  input=input.slice(0,-1); 
+  if(!input) input='0'; 
+  screenEl.innerText=getDisplayText(input); 
+}
 function calculate(){
   try{
-    let displayExpr=input.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
+    if(!input || input==='0'){ return; }
+    let displayExpr=getDisplayText(input);
     let result=parseFloat(eval(input).toFixed(10)).toString();
     addToHistory(displayExpr,result);
     document.getElementById('screenExpr').innerText=displayExpr+' =';
     input=result; screenEl.innerText=result;
-  } catch{ screenEl.innerText='Error'; input=''; }
+  } catch(err){ screenEl.innerText='Error'; input=''; }
 }
 function calcPercent(){
   try{
+    if(!input||input==='0') return;
     let result=(parseFloat(input)/100).toString();
     addToHistory(input+'%',result);
     input=result; screenEl.innerText=input;
@@ -271,28 +295,75 @@ function memoryAdd(){ memory+=parseFloat(input)||0; }
 function memorySub(){ memory-=parseFloat(input)||0; }
 function memoryRecall(){ input=memory.toString(); screenEl.innerText=input; }
 
-// SCIENTIFIC
+// SCIENTIFIC — FIX: handle empty/zero input gracefully, show proper error messages
 function sciFunc(fn){
-  let val=parseFloat(input);
-  if(isNaN(val)){screenEl.innerText='Error';return;}
-  let result,displayExpr;
+  // FIX: treat '0' and '' both as 0
+  let raw = (input===''||input==='0') ? '0' : input;
+  let val = parseFloat(raw);
+
+  // FIX: if val is NaN but input has operators (e.g. "3+4"), eval first
+  if(isNaN(val) && raw!==''){
+    try{ val=parseFloat(eval(raw)); } catch{ screenEl.innerText='Error'; return; }
+  }
+  if(isNaN(val)){ screenEl.innerText='Error'; return; }
+
+  let result, displayExpr;
   try{
     switch(fn){
-      case 'sin': result=Math.sin(val*Math.PI/180); displayExpr=`sin(${val}°)`; break;
-      case 'cos': result=Math.cos(val*Math.PI/180); displayExpr=`cos(${val}°)`; break;
-      case 'tan': result=Math.tan(val*Math.PI/180); displayExpr=`tan(${val}°)`; break;
-      case 'log': result=Math.log10(val); displayExpr=`log(${val})`; break;
-      case 'ln':  result=Math.log(val);   displayExpr=`ln(${val})`; break;
-      case 'sqrt':result=Math.sqrt(val);  displayExpr=`√(${val})`; break;
-      case 'sq':  result=val*val;         displayExpr=`${val}²`; break;
-      case 'inv': result=1/val;           displayExpr=`1/${val}`; break;
-      case 'abs': result=Math.abs(val);   displayExpr=`|${val}|`; break;
+      case 'sin':
+        result=Math.sin(val*Math.PI/180);
+        displayExpr=`sin(${val}°)`;
+        break;
+      case 'cos':
+        result=Math.cos(val*Math.PI/180);
+        displayExpr=`cos(${val}°)`;
+        break;
+      case 'tan':
+        // FIX: tan(90) is undefined, handle it
+        if(val%180===90){ screenEl.innerText='Undefined'; return; }
+        result=Math.tan(val*Math.PI/180);
+        displayExpr=`tan(${val}°)`;
+        break;
+      case 'log':
+        if(val<=0){ screenEl.innerText='Invalid (log≤0)'; return; }
+        result=Math.log10(val);
+        displayExpr=`log(${val})`;
+        break;
+      case 'ln':
+        if(val<=0){ screenEl.innerText='Invalid (ln≤0)'; return; }
+        result=Math.log(val);
+        displayExpr=`ln(${val})`;
+        break;
+      case 'sqrt':
+        if(val<0){ screenEl.innerText='Invalid (√<0)'; return; }
+        result=Math.sqrt(val);
+        displayExpr=`√(${val})`;
+        break;
+      case 'sq':
+        result=val*val;
+        displayExpr=`${val}²`;
+        break;
+      case 'inv':
+        if(val===0){ screenEl.innerText='Divide by 0'; return; }
+        result=1/val;
+        displayExpr=`1/${val}`;
+        break;
+      case 'abs':
+        result=Math.abs(val);
+        displayExpr=`|${val}|`;
+        break;
+      default:
+        return;
     }
     result=parseFloat(result.toFixed(10)).toString();
-    addToHistory(displayExpr,result);
+    addToHistory(displayExpr, result);
     document.getElementById('screenExpr').innerText=displayExpr+' =';
-    input=result; screenEl.innerText=result;
-  } catch{ screenEl.innerText='Error'; input=''; }
+    input=result;
+    screenEl.innerText=result;
+  } catch(e){
+    screenEl.innerText='Error';
+    input='';
+  }
 }
 
 // CONVERTERS
