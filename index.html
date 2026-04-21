@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,6 +73,25 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button onclick="press('.')">.</button>
   </div>
 
+  <!-- Length Converter -->
+  <div class="section">
+    <h3>📏 Length Converter</h3>
+    <input type="number" id="valueLen" placeholder="Value daalen">
+    <select id="fromLen"><option>Kilometer</option><option>Meter</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
+    <select id="toLen"><option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
+    <button class="convert-btn" onclick="convertLength()">Convert ▶</button>
+    <div class="result" id="resultLen"></div>
+  </div>
+
+  <!-- Mass Converter -->
+  <div class="section">
+    <h3>⚖️ Mass Converter</h3>
+    <input type="number" id="valueMass" placeholder="Value daalen">
+    <select id="fromMass"><option>Kilogram</option><option>Gram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
+    <select id="toMass"><option>Gram</option><option>Kilogram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
+    <button class="convert-btn" onclick="convertMass()">Convert ▶</button>
+    <div class="result" id="resultMass"></div>
+  </div>
   <!-- Currency Converter -->
   <div class="section">
     <h3>💱 Currency Converter <span class="live-badge">LIVE</span></h3>
@@ -104,25 +124,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <div class="rate-info" id="rateInfo"></div>
   </div>
 
-  <!-- Length Converter -->
-  <div class="section">
-    <h3>📏 Length Converter</h3>
-    <input type="number" id="valueLen" placeholder="Value daalen">
-    <select id="fromLen"><option>Kilometer</option><option>Meter</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
-    <select id="toLen"><option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option><option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option></select>
-    <button class="convert-btn" onclick="convertLength()">Convert ▶</button>
-    <div class="result" id="resultLen"></div>
-  </div>
-
-  <!-- Mass Converter -->
-  <div class="section">
-    <h3>⚖️ Mass Converter</h3>
-    <input type="number" id="valueMass" placeholder="Value daalen">
-    <select id="fromMass"><option>Kilogram</option><option>Gram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
-    <select id="toMass"><option>Gram</option><option>Kilogram</option><option>Milligram</option><option>Ton</option><option>Pound</option><option>Ounce</option></select>
-    <button class="convert-btn" onclick="convertMass()">Convert ▶</button>
-    <div class="result" id="resultMass"></div>
-  </div>
 </div>
 
 <script>
