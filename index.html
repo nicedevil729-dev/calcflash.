@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,99 +7,142 @@
 <title>CalcFlash ⚡ Pro</title>
 <style>
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0; }
-html,body{ width:100%; background:#0f0f0f; font-family:'Courier New',monospace; color:white; overflow-x:hidden; }
+
+/* ===== THEME VARIABLES ===== */
+:root[data-theme="dark"]{
+  --bg:#0f0f0f;
+  --surface:#1c1c1e;
+  --surface2:#2c2c2e;
+  --surface3:#3a3a3c;
+  --btn-num:#2c2c2e;
+  --btn-num-text:#ffffff;
+  --screen-bg:#000;
+  --screen-text:#ffffff;
+  --text-main:#ffffff;
+  --text-muted:#aaaaaa;
+  --text-dim:#666666;
+  --border:#3a3a3c;
+  --sci-bg:#1a2535;
+  --sci-text:#7eb8f7;
+  --sci-active:#2a3f5a;
+  --inv-bg:#2d1e0e;
+  --inv-text:#f7a07e;
+  --mode-bg:#1e2d40;
+  --mode-text:#7eb8f7;
+  --history-empty:#444444;
+}
+:root[data-theme="light"]{
+  --bg:#f0f0f5;
+  --surface:#ffffff;
+  --surface2:#e8e8ed;
+  --surface3:#d1d1d6;
+  --btn-num:#e8e8ed;
+  --btn-num-text:#1c1c1e;
+  --screen-bg:#1c1c1e;
+  --screen-text:#ffffff;
+  --text-main:#1c1c1e;
+  --text-muted:#555555;
+  --text-dim:#999999;
+  --border:#c8c8cc;
+  --sci-bg:#ddeeff;
+  --sci-text:#1a5fa8;
+  --sci-active:#bbd6f2;
+  --inv-bg:#fff0e0;
+  --inv-text:#b05a00;
+  --mode-bg:#ddeeff;
+  --mode-text:#1a5fa8;
+  --history-empty:#bbbbbb;
+}
+
+html,body{ width:100%; background:var(--bg); font-family:'Courier New',monospace; color:var(--text-main); overflow-x:hidden; transition:background 0.3s,color 0.3s; }
 .container{ width:100%; padding:8px; padding-top:4px; max-width:600px; margin:0 auto; }
 
 /* TOP BAR */
 .topbar{ display:flex; justify-content:space-between; align-items:center; padding:4px 2px 6px 2px; }
 .topbar-title{ font-size:16px; font-weight:bold; color:#4a90e2; letter-spacing:1px; font-family:Arial,sans-serif; }
-.dots-btn{ background:none; border:none; color:#aaa; font-size:24px; cursor:pointer; padding:4px 8px; border-radius:8px; height:auto; width:auto; line-height:1; letter-spacing:2px; }
-.dots-btn:active{ background:#2c2c2e; }
+.topbar-right{ display:flex; align-items:center; gap:6px; }
+
+/* THEME TOGGLE */
+.theme-toggle{
+  background:var(--surface2); border:none; border-radius:20px; padding:4px 10px;
+  color:var(--text-muted); font-size:16px; cursor:pointer; height:auto; width:auto;
+  display:flex; align-items:center; gap:4px; transition:background 0.2s;
+}
+.theme-toggle:active{ opacity:0.7; }
+
+.dots-btn{ background:none; border:none; color:var(--text-muted); font-size:24px; cursor:pointer; padding:4px 8px; border-radius:8px; height:auto; width:auto; line-height:1; letter-spacing:2px; }
+.dots-btn:active{ background:var(--surface2); }
 .menu-wrap{ position:relative; }
-.menu-dropdown{ display:none; position:absolute; right:0; top:40px; background:#1c1c1e; border:1px solid #3a3a3c; border-radius:12px; min-width:200px; z-index:1000; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.6); }
+.menu-dropdown{ display:none; position:absolute; right:0; top:40px; background:var(--surface); border:1px solid var(--border); border-radius:12px; min-width:200px; z-index:1000; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
 .menu-dropdown.open{ display:block; }
-.menu-item{ padding:13px 16px; font-size:14px; cursor:pointer; border-bottom:1px solid #2c2c2e; display:flex; align-items:center; gap:10px; color:#ddd; font-family:Arial,sans-serif; }
+.menu-item{ padding:13px 16px; font-size:14px; cursor:pointer; border-bottom:1px solid var(--surface2); display:flex; align-items:center; gap:10px; color:var(--text-muted); font-family:Arial,sans-serif; }
 .menu-item:last-child{ border-bottom:none; }
-.menu-item:active{ background:#2c2c2e; }
-.menu-item.active{ color:#4a90e2; background:#1a2a3a; }
+.menu-item:active{ background:var(--surface2); }
+.menu-item.active{ color:#4a90e2; background:var(--mode-bg); }
 
 /* SCREEN */
-.mode-badge{ display:inline-block; background:#1e2d40; color:#7eb8f7; font-size:10px; padding:2px 8px; border-radius:8px; margin-left:6px; vertical-align:middle; font-family:Arial,sans-serif; }
-.deg-badge{ display:inline-block; background:#2d1e1e; color:#f7a07e; font-size:10px; padding:2px 8px; border-radius:8px; margin-left:4px; vertical-align:middle; font-family:Arial,sans-serif; cursor:pointer; }
-.screen-expr{ font-size:12px; color:#555; text-align:right; padding:0 4px 2px 4px; min-height:16px; font-family:Arial,sans-serif; }
-.screen{ width:100%; min-height:60px; background:#000; color:white; font-size:28px; text-align:right; padding:10px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; line-height:1.3; font-family:'Courier New',monospace; }
+.mode-badge{ display:inline-block; background:var(--mode-bg); color:var(--mode-text); font-size:10px; padding:2px 8px; border-radius:8px; margin-left:6px; vertical-align:middle; font-family:Arial,sans-serif; }
+.deg-badge{ display:inline-block; background:var(--inv-bg); color:var(--inv-text); font-size:10px; padding:2px 8px; border-radius:8px; margin-left:4px; vertical-align:middle; font-family:Arial,sans-serif; cursor:pointer; }
+.screen-expr{ font-size:12px; color:var(--text-dim); text-align:right; padding:0 4px 2px 4px; min-height:16px; font-family:Arial,sans-serif; }
+.screen{ width:100%; min-height:60px; background:var(--screen-bg); color:var(--screen-text); font-size:28px; text-align:right; padding:10px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; line-height:1.3; font-family:'Courier New',monospace; transition:background 0.3s; }
 
 /* BUTTONS GENERAL */
-button{ height:50px; border:none; border-radius:11px; background:#2c2c2e; color:white; font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; font-family:Arial,sans-serif; transition:background 0.1s; }
+button{ height:50px; border:none; border-radius:11px; background:var(--btn-num); color:var(--btn-num-text); font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; font-family:Arial,sans-serif; transition:background 0.1s,color 0.1s; }
 button:active{ opacity:0.7; }
 
 /* BASIC GRID */
 .buttons{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
-.mem{ background:#3a3a3c; color:#aaa; font-size:12px; }
+.mem{ background:var(--surface3); color:var(--text-muted); font-size:12px; }
 .op{ color:#4a90e2; font-size:17px; }
 .clr{ color:#ff5f57; }
 .eq{ background:#4a90e2; color:white; font-size:22px; }
 .eq:active{ background:#357abd; }
 
 /* SCIENTIFIC LAYOUT */
-.sci-panel{ display:none; margin-bottom:5px; }
-.sci-panel.visible{ display:block; }
-.sci-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px; }
-.sci{ background:#1a2535; color:#7eb8f7; font-size:11px; height:42px; border-radius:9px; }
-.sci:active{ background:#2a3f5a; }
-.sci-row2{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
-.sci-orange{ background:#2d1e0e; color:#f7a07e; font-size:11px; height:42px; border-radius:9px; }
-
-/* SCIENTIFIC MAIN GRID - matches image layout */
-/* Row: ( ) 1/x MC M+ M- MR */
-/* Row: x² x³ xʸ C ÷ × ⌫ */
-/* Row: x! √ ʸ√x 7 8 9 − */
-/* Row: e ln lg 4 5 6 + */
-/* Row: sin cos tan 1 2 3 = */
-/* Row: Inv Rad/Deg π % 0 . = */
 .sci-full-grid{ display:none; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:5px; }
 .sci-full-grid.visible{ display:grid; }
 .sf{ height:46px; border-radius:10px; font-size:12px; }
-.sf-mem{ background:#3a3a3c; color:#bbb; font-size:11px; }
-.sf-op{ background:#2c2c2e; color:#4a90e2; font-size:13px; }
-.sf-sci{ background:#1a2535; color:#7eb8f7; }
-.sf-clr{ background:#2c2c2e; color:#ff5f57; font-size:15px; }
-.sf-num{ background:#2c2c2e; color:white; font-size:16px; }
+.sf-mem{ background:var(--surface3); color:var(--text-muted); font-size:11px; }
+.sf-op{ background:var(--btn-num); color:#4a90e2; font-size:13px; }
+.sf-sci{ background:var(--sci-bg); color:var(--sci-text); }
+.sf-sci:active{ background:var(--sci-active); }
+.sf-clr{ background:var(--btn-num); color:#ff5f57; font-size:15px; }
+.sf-num{ background:var(--btn-num); color:var(--btn-num-text); font-size:16px; }
 .sf-eq{ background:#4a90e2; color:white; font-size:20px; grid-row:span 2; height:96px; }
-.sf-inv{ background:#2d1e0e; color:#f7a07e; }
+.sf-inv{ background:var(--inv-bg); color:var(--inv-text); }
 
 /* HISTORY */
-.history-panel{ background:#1c1c1e; border-radius:12px; padding:8px; margin-bottom:8px; display:none; font-family:Arial,sans-serif; }
+.history-panel{ background:var(--surface); border-radius:12px; padding:8px; margin-bottom:8px; display:none; font-family:Arial,sans-serif; border:1px solid var(--border); }
 .history-panel.open{ display:block; }
 .history-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.history-header span{ color:#aaa; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
-.history-clear{ background:#3a3a3c; color:#ff5f57; border:none; font-size:11px; padding:4px 10px; border-radius:6px; cursor:pointer; height:auto; width:auto; }
+.history-header span{ color:var(--text-muted); font-size:11px; text-transform:uppercase; letter-spacing:1px; }
+.history-clear{ background:var(--surface3); color:#ff5f57; border:none; font-size:11px; padding:4px 10px; border-radius:6px; cursor:pointer; height:auto; width:auto; }
 .history-list{ max-height:180px; overflow-y:auto; }
-.history-item{ padding:8px 10px; border-bottom:1px solid #2c2c2e; cursor:pointer; border-radius:6px; }
-.history-item:active{ background:#2c2c2e; }
+.history-item{ padding:8px 10px; border-bottom:1px solid var(--surface2); cursor:pointer; border-radius:6px; }
+.history-item:active{ background:var(--surface2); }
 .history-item:last-child{ border-bottom:none; }
-.h-expr{ font-size:12px; color:#666; }
+.h-expr{ font-size:12px; color:var(--text-dim); }
 .h-result{ font-size:16px; color:#4a90e2; text-align:right; }
-.history-empty{ text-align:center; color:#444; font-size:13px; padding:20px; }
+.history-empty{ text-align:center; color:var(--history-empty); font-size:13px; padding:20px; }
 
 /* SECTIONS */
-.section{ margin-top:8px; background:#1c1c1e; border-radius:12px; padding:8px; font-family:Arial,sans-serif; }
-.section h3{ color:#aaa; font-size:11px; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px; }
-input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:14px; font-family:Arial,sans-serif; }
+.section{ margin-top:8px; background:var(--surface); border-radius:12px; padding:8px; font-family:Arial,sans-serif; border:1px solid var(--border); }
+.section h3{ color:var(--text-muted); font-size:11px; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px; }
+input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:14px; font-family:Arial,sans-serif; }
 .convert-btn{ background:#4a90e2; color:white; width:100%; padding:8px; font-size:14px; border-radius:9px; border:none; cursor:pointer; font-family:Arial,sans-serif; }
-.result{ margin-top:5px; background:#000; padding:7px 10px; border-radius:8px; color:#4a90e2; font-size:14px; min-height:30px; text-align:right; }
-.rate-info{ font-size:11px; color:#666; text-align:center; margin-top:4px; }
+.result{ margin-top:5px; background:var(--surface2); padding:7px 10px; border-radius:8px; color:#4a90e2; font-size:14px; min-height:30px; text-align:right; }
+.rate-info{ font-size:11px; color:var(--text-dim); text-align:center; margin-top:4px; }
 .live-badge{ background:#27ae60; color:white; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:5px; }
 .loading{ color:#f39c12; font-size:12px; text-align:center; padding:5px; }
 .custom-select{ position:relative; margin-bottom:5px; }
-.custom-select input.search-box{ width:100%; padding:6px 10px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; font-family:Arial,sans-serif; }
-.custom-select input.search-box::placeholder{ color:#888; }
-.dropdown-list{ display:none; position:absolute; width:100%; background:#1c1c1e; border:1px solid #4a90e2; border-radius:8px; max-height:180px; overflow-y:auto; z-index:999; top:36px; left:0; }
+.custom-select input.search-box{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:13px; font-family:Arial,sans-serif; }
+.custom-select input.search-box::placeholder{ color:var(--text-muted); }
+.dropdown-list{ display:none; position:absolute; width:100%; background:var(--surface); border:1px solid #4a90e2; border-radius:8px; max-height:180px; overflow-y:auto; z-index:999; top:36px; left:0; }
 .dropdown-list.open{ display:block; }
-.dropdown-item{ padding:8px 10px; cursor:pointer; font-size:13px; border-bottom:1px solid #2c2c2e; font-family:Arial,sans-serif; }
+.dropdown-item{ padding:8px 10px; cursor:pointer; font-size:13px; border-bottom:1px solid var(--surface2); font-family:Arial,sans-serif; color:var(--text-main); }
 .dropdown-item:hover,.dropdown-item.selected{ background:#4a90e2; color:white; }
-.selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid #3a3a3c; background:#2c2c2e; color:white; font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; font-family:Arial,sans-serif; }
-select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; -webkit-appearance:none; appearance:none; font-family:Arial,sans-serif; }
+.selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; font-family:Arial,sans-serif; height:auto; }
+select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:13px; -webkit-appearance:none; appearance:none; font-family:Arial,sans-serif; }
 
 /* WHATSAPP BUTTON */
 .whatsapp-btn{
@@ -110,11 +153,11 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
   border:none; border-radius:14px; cursor:pointer;
   font-family:Arial,sans-serif;
   box-shadow:0 4px 15px rgba(37,211,102,0.3);
-  transition:all 0.2s;
+  transition:all 0.2s; height:auto;
 }
 .whatsapp-btn:active{ transform:scale(0.97); box-shadow:0 2px 8px rgba(37,211,102,0.2); }
-.whatsapp-icon{ width:24px; height:24px; }
-.whatsapp-sub{ font-size:11px; color:rgba(255,255,255,0.75); text-align:center; margin-bottom:16px; font-family:Arial,sans-serif; }
+.whatsapp-icon{ width:24px; height:24px; flex-shrink:0; }
+.whatsapp-sub{ font-size:11px; color:var(--text-dim); text-align:center; margin-bottom:16px; font-family:Arial,sans-serif; }
 </style>
 </head>
 <body>
@@ -126,12 +169,16 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
       CalcFlash ⚡
       <span class="mode-badge" id="modeBadge">Basic</span>
     </div>
-    <div class="menu-wrap">
-      <button class="dots-btn" onclick="toggleMenu()">•••</button>
-      <div class="menu-dropdown" id="menuDropdown">
-        <div class="menu-item active" id="menuBasic" onclick="setMode('basic')">🔢 &nbsp;Basic Calculator</div>
-        <div class="menu-item" id="menuSci" onclick="setMode('sci')">🔬 &nbsp;Scientific Calculator</div>
-        <div class="menu-item" id="menuHistory" onclick="toggleHistory()">🕘 &nbsp;History</div>
+    <div class="topbar-right">
+      <!-- Light/Dark Toggle -->
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Light/Dark Mode">🌙</button>
+      <div class="menu-wrap">
+        <button class="dots-btn" onclick="toggleMenu()">•••</button>
+        <div class="menu-dropdown" id="menuDropdown">
+          <div class="menu-item active" id="menuBasic" onclick="setMode('basic')">🔢 &nbsp;Basic Calculator</div>
+          <div class="menu-item" id="menuSci" onclick="setMode('sci')">🔬 &nbsp;Scientific Calculator</div>
+          <div class="menu-item" id="menuHistory" onclick="toggleHistory()">🕘 &nbsp;History</div>
+        </div>
       </div>
     </div>
   </div>
@@ -151,9 +198,8 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
   <div class="screen-expr" id="screenExpr"></div>
   <div class="screen" id="screen">0</div>
 
-  <!-- ===== SCIENTIFIC FULL LAYOUT (matches image) ===== -->
+  <!-- ===== SCIENTIFIC FULL LAYOUT ===== -->
   <div class="sci-full-grid" id="sciFullGrid">
-    <!-- Row 1: ( ) 1/x MC M+ M- MR -->
     <button class="sf sf-sci" onclick="pressStr('(')">(</button>
     <button class="sf sf-sci" onclick="pressStr(')')">)</button>
     <button class="sf sf-sci" onclick="sciFunc('inv')">1/x</button>
@@ -162,7 +208,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-mem" onclick="memorySub()">M-</button>
     <button class="sf sf-mem" onclick="memoryRecall()">MR</button>
 
-    <!-- Row 2: x² x³ xʸ C ÷ × ⌫ -->
     <button class="sf sf-sci" onclick="sciFunc('sq')">x²</button>
     <button class="sf sf-sci" onclick="sciFunc('cube')">x³</button>
     <button class="sf sf-sci" onclick="pressStr('**')">xʸ</button>
@@ -171,7 +216,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-op" onclick="pressStr('*')">×</button>
     <button class="sf sf-op" onclick="backspace()">⌫</button>
 
-    <!-- Row 3: x! √ ʸ√x  7 8 9 − -->
     <button class="sf sf-sci" onclick="sciFunc('fact')">x!</button>
     <button class="sf sf-sci" onclick="sciFunc('sqrt')">√</button>
     <button class="sf sf-sci" onclick="sciFunc('nthroot')">ʸ√x</button>
@@ -180,7 +224,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('9')">9</button>
     <button class="sf sf-op" onclick="pressStr('-')">−</button>
 
-    <!-- Row 4: e ln lg  4 5 6 + -->
     <button class="sf sf-sci" onclick="insertConst('e')">e</button>
     <button class="sf sf-sci" onclick="sciFunc('ln')">ln</button>
     <button class="sf sf-sci" onclick="sciFunc('log')">lg</button>
@@ -189,7 +232,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('6')">6</button>
     <button class="sf sf-op" onclick="pressStr('+')">+</button>
 
-    <!-- Row 5: sin cos tan  1 2 3 = (spans 2 rows) -->
     <button class="sf sf-sci" onclick="sciFunc('sin')">sin</button>
     <button class="sf sf-sci" onclick="sciFunc('cos')">cos</button>
     <button class="sf sf-sci" onclick="sciFunc('tan')">tan</button>
@@ -198,14 +240,12 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('3')">3</button>
     <button class="sf sf-eq" onclick="calculate()">=</button>
 
-    <!-- Row 6: Inv Deg/Rad π  % 0 . -->
     <button class="sf sf-inv" onclick="toggleInv()" id="invBtn">Inv</button>
     <button class="sf sf-inv" onclick="toggleDegRad()" id="degRadBtn">Deg</button>
     <button class="sf sf-sci" onclick="insertConst('pi')">π</button>
     <button class="sf sf-op" onclick="calcPercent()">%</button>
     <button class="sf sf-num" onclick="press('0')">0</button>
     <button class="sf sf-num" onclick="press('.')">.</button>
-    <!-- = button spans from row 5 above -->
   </div>
 
   <!-- ===== BASIC LAYOUT ===== -->
@@ -263,7 +303,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <div class="loading" id="rateStatus">⏳ Rates load ho rahi hain...</div>
     <input type="number" id="valueCurr" placeholder="Amount daalen" oninput="convertCurrency()">
     <div style="margin-bottom:5px;">
-      <div style="color:#888;font-size:11px;margin-bottom:3px;">From:</div>
+      <div style="color:var(--text-muted);font-size:11px;margin-bottom:3px;">From:</div>
       <div class="custom-select" id="fromWrapper">
         <button class="selected-display" onclick="toggleDropdown('from')">🇵🇰 PKR - Pakistani Rupee ▼</button>
         <div class="dropdown-list" id="fromDropdown">
@@ -273,7 +313,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
       </div>
     </div>
     <div style="margin-bottom:5px;">
-      <div style="color:#888;font-size:11px;margin-bottom:3px;">To:</div>
+      <div style="color:var(--text-muted);font-size:11px;margin-bottom:3px;">To:</div>
       <div class="custom-select" id="toWrapper">
         <button class="selected-display" onclick="toggleDropdown('to')">🇴🇲 OMR - Omani Rial ▼</button>
         <div class="dropdown-list" id="toDropdown">
@@ -287,7 +327,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
   </div>
 
   <!-- WhatsApp Contact -->
-  <button class="whatsapp-btn" onclick="openWhatsApp()">
+  <button class="whatsapp-btn" id="waBtn">
     <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="white">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </svg>
@@ -298,6 +338,14 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
 </div>
 
 <script>
+// ===== THEME TOGGLE =====
+let isDark = true;
+function toggleTheme(){
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeBtn').innerText = isDark ? '🌙' : '☀️';
+}
+
 // ===== MENU =====
 let menuOpen=false;
 function toggleMenu(){
@@ -339,7 +387,7 @@ function addToHistory(expr,result){
 function renderHistory(){
   const list=document.getElementById('historyList');
   if(!historyData.length){list.innerHTML='<div class="history-empty">Abhi koi history nahi hai</div>';return;}
-  list.innerHTML=historyData.map((h,i)=>`<div class="history-item" onclick="useHistory(${i})"><div class="h-expr">${h.expr}</div><div class="h-result">= ${h.result} <span style="font-size:10px;color:#444;">${h.time}</span></div></div>`).join('');
+  list.innerHTML=historyData.map((h,i)=>`<div class="history-item" onclick="useHistory(${i})"><div class="h-expr">${h.expr}</div><div class="h-result">= ${h.result} <span style="font-size:10px;color:var(--text-dim)">${h.time}</span></div></div>`).join('');
 }
 function useHistory(i){
   input=historyData[i].result;
@@ -355,22 +403,18 @@ let isInv=false, isDeg=true;
 function getDisplayText(val){
   return val.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
 }
-
 function press(v){
   if(input==='0'||input==='') input='';
   else if(/^-?\d*\.?\d+$/.test(input) && v==='0' && input==='0') return;
-  input+=v;
-  screenEl.innerText=getDisplayText(input);
+  input+=v; screenEl.innerText=getDisplayText(input);
   document.getElementById('screenExpr').innerText='';
 }
-
 function pressStr(v){
   if(input===''&&(v==='-'||v==='+')){input=v;}
   else input+=v;
   screenEl.innerText=getDisplayText(input);
   document.getElementById('screenExpr').innerText='';
 }
-
 function insertConst(c){
   if(input==='0'||input==='') input='';
   if(c==='pi') input+=String(Math.PI);
@@ -378,15 +422,12 @@ function insertConst(c){
   screenEl.innerText=getDisplayText(input);
   document.getElementById('screenExpr').innerText='';
 }
-
 function clearScreen(){ input=''; screenEl.innerText='0'; document.getElementById('screenExpr').innerText=''; }
-
 function backspace(){
   input=input.slice(0,-1);
   if(!input) input='';
   screenEl.innerText=input||'0';
 }
-
 function calculate(){
   try{
     if(!input||input==='0') return;
@@ -399,7 +440,6 @@ function calculate(){
     input=result; screenEl.innerText=result;
   } catch(err){ screenEl.innerText='Error'; input=''; }
 }
-
 function calcPercent(){
   try{
     if(!input||input==='0') return;
@@ -426,102 +466,44 @@ function toggleDegRad(){
 function toggleInv(){
   isInv=!isInv;
   document.getElementById('invBtn').style.background=isInv?'#4a90e2':'';
-  document.getElementById('invBtn').style.color=isInv?'white':'#f7a07e';
+  document.getElementById('invBtn').style.color=isInv?'white':'';
 }
 
 // ===== FACTORIAL =====
 function factorial(n){
-  n=Math.round(n);
-  if(n<0) return NaN;
-  if(n===0||n===1) return 1;
-  if(n>170) return Infinity;
-  let r=1; for(let i=2;i<=n;i++) r*=i; return r;
+  n=Math.round(n); if(n<0) return NaN; if(n===0||n===1) return 1;
+  if(n>170) return Infinity; let r=1; for(let i=2;i<=n;i++) r*=i; return r;
 }
 
 // ===== SCIENTIFIC FUNCTIONS =====
 function sciFunc(fn){
   let raw=(input===''||input==='0')?'0':input;
-  let val;
-  try{ val=parseFloat(eval(raw)); } catch{ screenEl.innerText='Error'; return; }
+  let val; try{ val=parseFloat(eval(raw)); } catch{ screenEl.innerText='Error'; return; }
   if(isNaN(val)){screenEl.innerText='Error';return;}
-
-  let toRad=isDeg?(Math.PI/180):1;
-  let fromRad=isDeg?(180/Math.PI):1;
-
+  let toRad=isDeg?(Math.PI/180):1, fromRad=isDeg?(180/Math.PI):1;
   let result, displayExpr;
   try{
     switch(fn){
-      // Normal trig
-      case 'sin':
-        if(isInv){ result=Math.asin(val)*fromRad; displayExpr=`asin(${val})`; }
-        else { result=Math.sin(val*toRad); displayExpr=`sin(${val}${isDeg?'°':'rad'})`; }
-        break;
-      case 'cos':
-        if(isInv){ result=Math.acos(val)*fromRad; displayExpr=`acos(${val})`; }
-        else { result=Math.cos(val*toRad); displayExpr=`cos(${val}${isDeg?'°':'rad'})`; }
-        break;
-      case 'tan':
-        if(isInv){ result=Math.atan(val)*fromRad; displayExpr=`atan(${val})`; }
-        else {
-          if(isDeg && val%180===90){screenEl.innerText='Undefined';return;}
-          result=Math.tan(val*toRad);
-          displayExpr=`tan(${val}${isDeg?'°':'rad'})`;
-        }
-        break;
-      case 'log':
-        if(val<=0){screenEl.innerText='Invalid';return;}
-        if(isInv){ result=Math.pow(10,val); displayExpr=`10^${val}`; }
-        else { result=Math.log10(val); displayExpr=`log(${val})`; }
-        break;
-      case 'ln':
-        if(val<=0){screenEl.innerText='Invalid';return;}
-        if(isInv){ result=Math.exp(val); displayExpr=`e^${val}`; }
-        else { result=Math.log(val); displayExpr=`ln(${val})`; }
-        break;
-      case 'sqrt':
-        if(val<0){screenEl.innerText='Invalid';return;}
-        result=Math.sqrt(val); displayExpr=`√(${val})`;
-        break;
-      case 'nthroot':
-        // ʸ√x: prompt for y, then calc
-        let y=prompt('Kaun si root? (e.g. 3 for cube root)','3');
-        if(!y) return;
-        y=parseFloat(y);
-        if(isNaN(y)||y===0){screenEl.innerText='Invalid';return;}
-        result=Math.pow(val,1/y); displayExpr=`${y}√(${val})`;
-        break;
-      case 'sq':
-        result=val*val; displayExpr=`${val}²`;
-        break;
-      case 'cube':
-        result=val*val*val; displayExpr=`${val}³`;
-        break;
-      case 'inv':
-        if(val===0){screenEl.innerText='Div/0';return;}
-        result=1/val; displayExpr=`1/${val}`;
-        break;
-      case 'abs':
-        result=Math.abs(val); displayExpr=`|${val}|`;
-        break;
-      case 'fact':
-        if(val<0||!Number.isInteger(val)){screenEl.innerText='Invalid';return;}
-        result=factorial(val);
-        if(!isFinite(result)){screenEl.innerText='Too Large';return;}
-        displayExpr=`${val}!`;
-        break;
+      case 'sin': if(isInv){result=Math.asin(val)*fromRad;displayExpr=`asin(${val})`;}else{result=Math.sin(val*toRad);displayExpr=`sin(${val}${isDeg?'°':'rad'})`;} break;
+      case 'cos': if(isInv){result=Math.acos(val)*fromRad;displayExpr=`acos(${val})`;}else{result=Math.cos(val*toRad);displayExpr=`cos(${val}${isDeg?'°':'rad'})`;} break;
+      case 'tan': if(isInv){result=Math.atan(val)*fromRad;displayExpr=`atan(${val})`;}else{if(isDeg&&val%180===90){screenEl.innerText='Undefined';return;}result=Math.tan(val*toRad);displayExpr=`tan(${val}${isDeg?'°':'rad'})`;} break;
+      case 'log': if(val<=0){screenEl.innerText='Invalid';return;} if(isInv){result=Math.pow(10,val);displayExpr=`10^${val}`;}else{result=Math.log10(val);displayExpr=`log(${val})`;} break;
+      case 'ln': if(val<=0){screenEl.innerText='Invalid';return;} if(isInv){result=Math.exp(val);displayExpr=`e^${val}`;}else{result=Math.log(val);displayExpr=`ln(${val})`;} break;
+      case 'sqrt': if(val<0){screenEl.innerText='Invalid';return;} result=Math.sqrt(val);displayExpr=`√(${val})`; break;
+      case 'nthroot': let y=prompt('Kaun si root? (e.g. 3 for cube root)','3'); if(!y) return; y=parseFloat(y); if(isNaN(y)||y===0){screenEl.innerText='Invalid';return;} result=Math.pow(val,1/y);displayExpr=`${y}√(${val})`; break;
+      case 'sq': result=val*val;displayExpr=`${val}²`; break;
+      case 'cube': result=val*val*val;displayExpr=`${val}³`; break;
+      case 'inv': if(val===0){screenEl.innerText='Div/0';return;} result=1/val;displayExpr=`1/${val}`; break;
+      case 'fact': if(val<0||!Number.isInteger(val)){screenEl.innerText='Invalid';return;} result=factorial(val); if(!isFinite(result)){screenEl.innerText='Too Large';return;} displayExpr=`${val}!`; break;
       default: return;
     }
     if(result===undefined||!isFinite(result)){screenEl.innerText='Error';return;}
     result=parseFloat(result.toFixed(10)).toString();
     addToHistory(displayExpr,result);
     document.getElementById('screenExpr').innerText=displayExpr+' =';
-    input=result;
-    screenEl.innerText=result;
-    // Reset inv after use
-    if(isInv){ isInv=false; document.getElementById('invBtn').style.background=''; document.getElementById('invBtn').style.color='#f7a07e'; }
-  } catch(e){
-    screenEl.innerText='Error'; input='';
-  }
+    input=result; screenEl.innerText=result;
+    if(isInv){ isInv=false; document.getElementById('invBtn').style.background=''; document.getElementById('invBtn').style.color=''; }
+  } catch(e){ screenEl.innerText='Error'; input=''; }
 }
 
 // ===== CONVERTERS =====
@@ -553,13 +535,26 @@ async function loadRates(){
 function convertCurrency(){let v=parseFloat(document.getElementById('valueCurr').value);if(isNaN(v)||!rates.USD)return;let inUSD=v/rates[selectedFrom];let result=inUSD*rates[selectedTo];document.getElementById('resultCurr').innerText=result.toFixed(4)+' '+selectedTo;document.getElementById('rateInfo').innerText='1 '+selectedFrom+' = '+(rates[selectedTo]/rates[selectedFrom]).toFixed(6)+' '+selectedTo;}
 loadRates(); setInterval(loadRates,600000);
 
-// ===== WHATSAPP =====
-function openWhatsApp(){
-  // APNA WHATSAPP NUMBER YAHAN DAALEN (country code ke saath, no + or spaces)
-  const number = '96891234567'; // <-- YE BADLAIN APNE NUMBER SE
+// ===== WHATSAPP — FIXED =====
+// APNA NUMBER YAHAN DAALEN (country code ke saath, no + or spaces)
+const WA_NUMBER = '96891234567'; // <-- YE BADLAIN APNE NUMBER SE
+
+document.getElementById('waBtn').addEventListener('click', function(){
   const msg = encodeURIComponent('Salam! CalcFlash app ke baare mein rabta karna tha.');
-  window.open('https://wa.me/'+number+'?text='+msg,'_blank');
-}
+  const url = 'https://wa.me/' + WA_NUMBER + '?text=' + msg;
+  // Try multiple methods for maximum compatibility
+  try {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch(e) {
+    window.location.href = url;
+  }
+});
 </script>
 </body>
 </html>
