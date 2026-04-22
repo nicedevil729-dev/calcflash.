@@ -3,39 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#4a90e2">
-<title>CalcFlash ⚡</title>
+<meta name="theme-color" content="#1a73e8">
+<title>CalcFlash ⚡ Pro</title>
 <style>
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0; }
-html,body{ width:100%; background:#0f0f0f; font-family:Arial,sans-serif; color:white; overflow-x:hidden; }
-.container{ width:100%; padding:8px; padding-top:4px; }
+html,body{ width:100%; background:#0f0f0f; font-family:'Courier New',monospace; color:white; overflow-x:hidden; }
+.container{ width:100%; padding:8px; padding-top:4px; max-width:600px; margin:0 auto; }
+
+/* TOP BAR */
 .topbar{ display:flex; justify-content:space-between; align-items:center; padding:4px 2px 6px 2px; }
-.topbar-title{ font-size:16px; font-weight:bold; color:#4a90e2; letter-spacing:1px; }
+.topbar-title{ font-size:16px; font-weight:bold; color:#4a90e2; letter-spacing:1px; font-family:Arial,sans-serif; }
 .dots-btn{ background:none; border:none; color:#aaa; font-size:24px; cursor:pointer; padding:4px 8px; border-radius:8px; height:auto; width:auto; line-height:1; letter-spacing:2px; }
 .dots-btn:active{ background:#2c2c2e; }
 .menu-wrap{ position:relative; }
-.menu-dropdown{ display:none; position:absolute; right:0; top:40px; background:#1c1c1e; border:1px solid #3a3a3c; border-radius:12px; min-width:190px; z-index:1000; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.6); }
+.menu-dropdown{ display:none; position:absolute; right:0; top:40px; background:#1c1c1e; border:1px solid #3a3a3c; border-radius:12px; min-width:200px; z-index:1000; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.6); }
 .menu-dropdown.open{ display:block; }
-.menu-item{ padding:13px 16px; font-size:14px; cursor:pointer; border-bottom:1px solid #2c2c2e; display:flex; align-items:center; gap:10px; color:#ddd; }
+.menu-item{ padding:13px 16px; font-size:14px; cursor:pointer; border-bottom:1px solid #2c2c2e; display:flex; align-items:center; gap:10px; color:#ddd; font-family:Arial,sans-serif; }
 .menu-item:last-child{ border-bottom:none; }
 .menu-item:active{ background:#2c2c2e; }
 .menu-item.active{ color:#4a90e2; background:#1a2a3a; }
-.screen-expr{ font-size:12px; color:#555; text-align:right; padding:0 4px 2px 4px; min-height:16px; }
-.screen{ width:100%; min-height:52px; background:#000; color:white; font-size:26px; text-align:right; padding:8px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; line-height:1.3; }
+
+/* SCREEN */
+.mode-badge{ display:inline-block; background:#1e2d40; color:#7eb8f7; font-size:10px; padding:2px 8px; border-radius:8px; margin-left:6px; vertical-align:middle; font-family:Arial,sans-serif; }
+.deg-badge{ display:inline-block; background:#2d1e1e; color:#f7a07e; font-size:10px; padding:2px 8px; border-radius:8px; margin-left:4px; vertical-align:middle; font-family:Arial,sans-serif; cursor:pointer; }
+.screen-expr{ font-size:12px; color:#555; text-align:right; padding:0 4px 2px 4px; min-height:16px; font-family:Arial,sans-serif; }
+.screen{ width:100%; min-height:60px; background:#000; color:white; font-size:28px; text-align:right; padding:10px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; line-height:1.3; font-family:'Courier New',monospace; }
+
+/* BUTTONS GENERAL */
+button{ height:50px; border:none; border-radius:11px; background:#2c2c2e; color:white; font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; font-family:Arial,sans-serif; transition:background 0.1s; }
+button:active{ opacity:0.7; }
+
+/* BASIC GRID */
 .buttons{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
-button{ height:50px; border:none; border-radius:11px; background:#2c2c2e; color:white; font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; }
-button:active{ background:#555; }
 .mem{ background:#3a3a3c; color:#aaa; font-size:12px; }
 .op{ color:#4a90e2; font-size:17px; }
 .clr{ color:#ff5f57; }
-.eq{ background:#4a90e2; color:white; grid-row:span 2; height:105px; font-size:22px; }
+.eq{ background:#4a90e2; color:white; font-size:22px; }
 .eq:active{ background:#357abd; }
-/* FIX: sci-row default hidden, shown via JS */
-.sci-row{ display:none; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:5px; }
-.sci{ background:#1a2535; color:#7eb8f7; font-size:12px; height:44px; }
+
+/* SCIENTIFIC LAYOUT */
+.sci-panel{ display:none; margin-bottom:5px; }
+.sci-panel.visible{ display:block; }
+.sci-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px; }
+.sci{ background:#1a2535; color:#7eb8f7; font-size:11px; height:42px; border-radius:9px; }
 .sci:active{ background:#2a3f5a; }
-.mode-badge{ display:inline-block; background:#1e2d40; color:#7eb8f7; font-size:10px; padding:2px 8px; border-radius:8px; margin-left:6px; vertical-align:middle; }
-.history-panel{ background:#1c1c1e; border-radius:12px; padding:8px; margin-bottom:8px; display:none; }
+.sci-row2{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.sci-orange{ background:#2d1e0e; color:#f7a07e; font-size:11px; height:42px; border-radius:9px; }
+
+/* SCIENTIFIC MAIN GRID - matches image layout */
+/* Row: ( ) 1/x MC M+ M- MR */
+/* Row: x² x³ xʸ C ÷ × ⌫ */
+/* Row: x! √ ʸ√x 7 8 9 − */
+/* Row: e ln lg 4 5 6 + */
+/* Row: sin cos tan 1 2 3 = */
+/* Row: Inv Rad/Deg π % 0 . = */
+.sci-full-grid{ display:none; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:5px; }
+.sci-full-grid.visible{ display:grid; }
+.sf{ height:46px; border-radius:10px; font-size:12px; }
+.sf-mem{ background:#3a3a3c; color:#bbb; font-size:11px; }
+.sf-op{ background:#2c2c2e; color:#4a90e2; font-size:13px; }
+.sf-sci{ background:#1a2535; color:#7eb8f7; }
+.sf-clr{ background:#2c2c2e; color:#ff5f57; font-size:15px; }
+.sf-num{ background:#2c2c2e; color:white; font-size:16px; }
+.sf-eq{ background:#4a90e2; color:white; font-size:20px; grid-row:span 2; height:96px; }
+.sf-inv{ background:#2d1e0e; color:#f7a07e; }
+
+/* HISTORY */
+.history-panel{ background:#1c1c1e; border-radius:12px; padding:8px; margin-bottom:8px; display:none; font-family:Arial,sans-serif; }
 .history-panel.open{ display:block; }
 .history-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
 .history-header span{ color:#aaa; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
@@ -47,23 +81,40 @@ button:active{ background:#555; }
 .h-expr{ font-size:12px; color:#666; }
 .h-result{ font-size:16px; color:#4a90e2; text-align:right; }
 .history-empty{ text-align:center; color:#444; font-size:13px; padding:20px; }
-.section{ margin-top:8px; background:#1c1c1e; border-radius:12px; padding:8px; }
+
+/* SECTIONS */
+.section{ margin-top:8px; background:#1c1c1e; border-radius:12px; padding:8px; font-family:Arial,sans-serif; }
 .section h3{ color:#aaa; font-size:11px; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px; }
-input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:14px; }
-.convert-btn{ background:#4a90e2; color:white; width:100%; padding:8px; font-size:14px; border-radius:9px; border:none; cursor:pointer; }
+input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:14px; font-family:Arial,sans-serif; }
+.convert-btn{ background:#4a90e2; color:white; width:100%; padding:8px; font-size:14px; border-radius:9px; border:none; cursor:pointer; font-family:Arial,sans-serif; }
 .result{ margin-top:5px; background:#000; padding:7px 10px; border-radius:8px; color:#4a90e2; font-size:14px; min-height:30px; text-align:right; }
 .rate-info{ font-size:11px; color:#666; text-align:center; margin-top:4px; }
 .live-badge{ background:#27ae60; color:white; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:5px; }
 .loading{ color:#f39c12; font-size:12px; text-align:center; padding:5px; }
 .custom-select{ position:relative; margin-bottom:5px; }
-.custom-select input.search-box{ width:100%; padding:6px 10px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; }
+.custom-select input.search-box{ width:100%; padding:6px 10px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; font-family:Arial,sans-serif; }
 .custom-select input.search-box::placeholder{ color:#888; }
 .dropdown-list{ display:none; position:absolute; width:100%; background:#1c1c1e; border:1px solid #4a90e2; border-radius:8px; max-height:180px; overflow-y:auto; z-index:999; top:36px; left:0; }
 .dropdown-list.open{ display:block; }
-.dropdown-item{ padding:8px 10px; cursor:pointer; font-size:13px; border-bottom:1px solid #2c2c2e; }
+.dropdown-item{ padding:8px 10px; cursor:pointer; font-size:13px; border-bottom:1px solid #2c2c2e; font-family:Arial,sans-serif; }
 .dropdown-item:hover,.dropdown-item.selected{ background:#4a90e2; color:white; }
-.selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid #3a3a3c; background:#2c2c2e; color:white; font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; }
-select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; -webkit-appearance:none; appearance:none; }
+.selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid #3a3a3c; background:#2c2c2e; color:white; font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; font-family:Arial,sans-serif; }
+select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:none; background:#2c2c2e; color:white; font-size:13px; -webkit-appearance:none; appearance:none; font-family:Arial,sans-serif; }
+
+/* WHATSAPP BUTTON */
+.whatsapp-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; padding:14px; margin-top:12px; margin-bottom:8px;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  color:white; font-size:15px; font-weight:bold;
+  border:none; border-radius:14px; cursor:pointer;
+  font-family:Arial,sans-serif;
+  box-shadow:0 4px 15px rgba(37,211,102,0.3);
+  transition:all 0.2s;
+}
+.whatsapp-btn:active{ transform:scale(0.97); box-shadow:0 2px 8px rgba(37,211,102,0.2); }
+.whatsapp-icon{ width:24px; height:24px; }
+.whatsapp-sub{ font-size:11px; color:rgba(255,255,255,0.75); text-align:center; margin-bottom:16px; font-family:Arial,sans-serif; }
 </style>
 </head>
 <body>
@@ -71,7 +122,10 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
 
   <!-- Top Bar -->
   <div class="topbar">
-    <div class="topbar-title">CalcFlash ⚡ <span class="mode-badge" id="modeBadge">Basic</span></div>
+    <div class="topbar-title">
+      CalcFlash ⚡
+      <span class="mode-badge" id="modeBadge">Basic</span>
+    </div>
     <div class="menu-wrap">
       <button class="dots-btn" onclick="toggleMenu()">•••</button>
       <div class="menu-dropdown" id="menuDropdown">
@@ -97,47 +151,90 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
   <div class="screen-expr" id="screenExpr"></div>
   <div class="screen" id="screen">0</div>
 
-  <!-- Scientific Row -->
-  <div class="sci-row" id="sciRow">
-    <button class="sci" onclick="sciFunc('sin')">sin</button>
-    <button class="sci" onclick="sciFunc('cos')">cos</button>
-    <button class="sci" onclick="sciFunc('tan')">tan</button>
-    <button class="sci" onclick="sciFunc('log')">log</button>
-    <button class="sci" onclick="sciFunc('ln')">ln</button>
-    <button class="sci" onclick="sciFunc('sqrt')">√x</button>
-    <button class="sci" onclick="sciFunc('sq')">x²</button>
-    <button class="sci" onclick="sciFunc('inv')">1/x</button>
-    <button class="sci" onclick="insertConst('pi')">π</button>
-    <button class="sci" onclick="insertConst('e')">e</button>
-    <button class="sci" onclick="sciFunc('abs')">|x|</button>
-    <button class="sci" onclick="press('**')">xʸ</button>
+  <!-- ===== SCIENTIFIC FULL LAYOUT (matches image) ===== -->
+  <div class="sci-full-grid" id="sciFullGrid">
+    <!-- Row 1: ( ) 1/x MC M+ M- MR -->
+    <button class="sf sf-sci" onclick="pressStr('(')">(</button>
+    <button class="sf sf-sci" onclick="pressStr(')')">)</button>
+    <button class="sf sf-sci" onclick="sciFunc('inv')">1/x</button>
+    <button class="sf sf-mem" onclick="memoryClear()">MC</button>
+    <button class="sf sf-mem" onclick="memoryAdd()">M+</button>
+    <button class="sf sf-mem" onclick="memorySub()">M-</button>
+    <button class="sf sf-mem" onclick="memoryRecall()">MR</button>
+
+    <!-- Row 2: x² x³ xʸ C ÷ × ⌫ -->
+    <button class="sf sf-sci" onclick="sciFunc('sq')">x²</button>
+    <button class="sf sf-sci" onclick="sciFunc('cube')">x³</button>
+    <button class="sf sf-sci" onclick="pressStr('**')">xʸ</button>
+    <button class="sf sf-clr" onclick="clearScreen()">C</button>
+    <button class="sf sf-op" onclick="pressStr('/')">÷</button>
+    <button class="sf sf-op" onclick="pressStr('*')">×</button>
+    <button class="sf sf-op" onclick="backspace()">⌫</button>
+
+    <!-- Row 3: x! √ ʸ√x  7 8 9 − -->
+    <button class="sf sf-sci" onclick="sciFunc('fact')">x!</button>
+    <button class="sf sf-sci" onclick="sciFunc('sqrt')">√</button>
+    <button class="sf sf-sci" onclick="sciFunc('nthroot')">ʸ√x</button>
+    <button class="sf sf-num" onclick="press('7')">7</button>
+    <button class="sf sf-num" onclick="press('8')">8</button>
+    <button class="sf sf-num" onclick="press('9')">9</button>
+    <button class="sf sf-op" onclick="pressStr('-')">−</button>
+
+    <!-- Row 4: e ln lg  4 5 6 + -->
+    <button class="sf sf-sci" onclick="insertConst('e')">e</button>
+    <button class="sf sf-sci" onclick="sciFunc('ln')">ln</button>
+    <button class="sf sf-sci" onclick="sciFunc('log')">lg</button>
+    <button class="sf sf-num" onclick="press('4')">4</button>
+    <button class="sf sf-num" onclick="press('5')">5</button>
+    <button class="sf sf-num" onclick="press('6')">6</button>
+    <button class="sf sf-op" onclick="pressStr('+')">+</button>
+
+    <!-- Row 5: sin cos tan  1 2 3 = (spans 2 rows) -->
+    <button class="sf sf-sci" onclick="sciFunc('sin')">sin</button>
+    <button class="sf sf-sci" onclick="sciFunc('cos')">cos</button>
+    <button class="sf sf-sci" onclick="sciFunc('tan')">tan</button>
+    <button class="sf sf-num" onclick="press('1')">1</button>
+    <button class="sf sf-num" onclick="press('2')">2</button>
+    <button class="sf sf-num" onclick="press('3')">3</button>
+    <button class="sf sf-eq" onclick="calculate()">=</button>
+
+    <!-- Row 6: Inv Deg/Rad π  % 0 . -->
+    <button class="sf sf-inv" onclick="toggleInv()" id="invBtn">Inv</button>
+    <button class="sf sf-inv" onclick="toggleDegRad()" id="degRadBtn">Deg</button>
+    <button class="sf sf-sci" onclick="insertConst('pi')">π</button>
+    <button class="sf sf-op" onclick="calcPercent()">%</button>
+    <button class="sf sf-num" onclick="press('0')">0</button>
+    <button class="sf sf-num" onclick="press('.')">.</button>
+    <!-- = button spans from row 5 above -->
   </div>
 
-  <!-- Main Buttons -->
-  <div class="buttons">
-    <button class="mem" onclick="memoryClear()">MC</button>
-    <button class="mem" onclick="memoryAdd()">M+</button>
-    <button class="mem" onclick="memorySub()">M-</button>
-    <button class="mem" onclick="memoryRecall()">MR</button>
-    <button class="clr" onclick="clearScreen()">C</button>
-    <button class="op" onclick="press('/')">÷</button>
-    <button class="op" onclick="press('*')">×</button>
-    <button class="op" onclick="backspace()">⌫</button>
-    <button onclick="press('7')">7</button>
-    <button onclick="press('8')">8</button>
-    <button onclick="press('9')">9</button>
-    <button class="op" onclick="press('-')">−</button>
-    <button onclick="press('4')">4</button>
-    <button onclick="press('5')">5</button>
-    <button onclick="press('6')">6</button>
-    <button class="op" onclick="press('+')">+</button>
-    <button onclick="press('1')">1</button>
-    <button onclick="press('2')">2</button>
-    <button onclick="press('3')">3</button>
-    <button class="eq" onclick="calculate()">=</button>
-    <button class="op" onclick="calcPercent()">%</button>
-    <button onclick="press('0')">0</button>
-    <button onclick="press('.')">.</button>
+  <!-- ===== BASIC LAYOUT ===== -->
+  <div id="basicPanel">
+    <div class="buttons">
+      <button class="mem" onclick="memoryClear()">MC</button>
+      <button class="mem" onclick="memoryAdd()">M+</button>
+      <button class="mem" onclick="memorySub()">M-</button>
+      <button class="mem" onclick="memoryRecall()">MR</button>
+      <button class="clr" onclick="clearScreen()">C</button>
+      <button class="op" onclick="pressStr('/')">÷</button>
+      <button class="op" onclick="pressStr('*')">×</button>
+      <button class="op" onclick="backspace()">⌫</button>
+      <button onclick="press('7')">7</button>
+      <button onclick="press('8')">8</button>
+      <button onclick="press('9')">9</button>
+      <button class="op" onclick="pressStr('-')">−</button>
+      <button onclick="press('4')">4</button>
+      <button onclick="press('5')">5</button>
+      <button onclick="press('6')">6</button>
+      <button class="op" onclick="pressStr('+')">+</button>
+      <button onclick="press('1')">1</button>
+      <button onclick="press('2')">2</button>
+      <button onclick="press('3')">3</button>
+      <button class="eq" style="grid-row:span 2;height:105px;font-size:22px;" onclick="calculate()">=</button>
+      <button class="op" onclick="calcPercent()">%</button>
+      <button onclick="press('0')">0</button>
+      <button onclick="press('.')">.</button>
+    </div>
   </div>
 
   <!-- Length Converter -->
@@ -178,7 +275,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <div style="margin-bottom:5px;">
       <div style="color:#888;font-size:11px;margin-bottom:3px;">To:</div>
       <div class="custom-select" id="toWrapper">
-        <button class="selected-display" onclick="toggleDropdown('to')">🇺🇸 USD - US Dollar ▼</button>
+        <button class="selected-display" onclick="toggleDropdown('to')">🇴🇲 OMR - Omani Rial ▼</button>
         <div class="dropdown-list" id="toDropdown">
           <input class="search-box" placeholder="🔍 Search currency..." oninput="filterList('to', this.value)">
           <div id="toList"></div>
@@ -189,9 +286,19 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <div class="rate-info" id="rateInfo"></div>
   </div>
 
+  <!-- WhatsApp Contact -->
+  <button class="whatsapp-btn" onclick="openWhatsApp()">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    📞 Rabta Karen — WhatsApp
+  </button>
+  <div class="whatsapp-sub">Koi issue ya report? Seedha message karen ⬆️</div>
+
 </div>
+
 <script>
-// MENU
+// ===== MENU =====
 let menuOpen=false;
 function toggleMenu(){
   menuOpen=!menuOpen;
@@ -202,20 +309,19 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.custom-select')) document.querySelectorAll('.dropdown-list').forEach(el=>el.classList.remove('open'));
 });
 
-// MODE
+// ===== MODE =====
 let currentMode='basic';
 function setMode(mode){
   currentMode=mode;
   document.getElementById('menuDropdown').classList.remove('open'); menuOpen=false;
-  const sciRow=document.getElementById('sciRow');
-  // FIX: properly toggle display between grid and none
-  sciRow.style.display=(mode==='sci')?'grid':'none';
+  document.getElementById('sciFullGrid').classList.toggle('visible', mode==='sci');
+  document.getElementById('basicPanel').style.display=(mode==='sci')?'none':'block';
   document.getElementById('modeBadge').innerText=(mode==='sci')?'Scientific':'Basic';
   document.getElementById('menuBasic').classList.toggle('active',mode==='basic');
   document.getElementById('menuSci').classList.toggle('active',mode==='sci');
 }
 
-// HISTORY
+// ===== HISTORY =====
 let historyData=[],historyOpen=false;
 function toggleHistory(){
   historyOpen=!historyOpen;
@@ -242,24 +348,31 @@ function useHistory(i){
 }
 function clearHistory(){ historyData=[]; renderHistory(); }
 
-// CALCULATOR
-let screenEl=document.getElementById('screen'),input='',memory=0;
+// ===== CALCULATOR CORE =====
+let screenEl=document.getElementById('screen'), input='', memory=0;
+let isInv=false, isDeg=true;
 
 function getDisplayText(val){
   return val.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
 }
 
 function press(v){
-  // FIX: allow chaining — don't wipe if input was a previous result unless it's '0'
-  if(input==='0') input='';
+  if(input==='0'||input==='') input='';
+  else if(/^-?\d*\.?\d+$/.test(input) && v==='0' && input==='0') return;
   input+=v;
   screenEl.innerText=getDisplayText(input);
   document.getElementById('screenExpr').innerText='';
 }
 
-// FIX: separate function for inserting constants (π, e) so they don't get wiped
+function pressStr(v){
+  if(input===''&&(v==='-'||v==='+')){input=v;}
+  else input+=v;
+  screenEl.innerText=getDisplayText(input);
+  document.getElementById('screenExpr').innerText='';
+}
+
 function insertConst(c){
-  if(input==='0') input='';
+  if(input==='0'||input==='') input='';
   if(c==='pi') input+=String(Math.PI);
   else if(c==='e') input+=String(Math.E);
   screenEl.innerText=getDisplayText(input);
@@ -267,119 +380,164 @@ function insertConst(c){
 }
 
 function clearScreen(){ input=''; screenEl.innerText='0'; document.getElementById('screenExpr').innerText=''; }
-function backspace(){ 
-  input=input.slice(0,-1); 
-  if(!input) input='0'; 
-  screenEl.innerText=getDisplayText(input); 
+
+function backspace(){
+  input=input.slice(0,-1);
+  if(!input) input='';
+  screenEl.innerText=input||'0';
 }
+
 function calculate(){
   try{
-    if(!input || input==='0'){ return; }
+    if(!input||input==='0') return;
     let displayExpr=getDisplayText(input);
-    let result=parseFloat(eval(input).toFixed(10)).toString();
+    let evaled=eval(input);
+    if(!isFinite(evaled)) throw new Error('Infinity');
+    let result=parseFloat(evaled.toFixed(10)).toString();
     addToHistory(displayExpr,result);
     document.getElementById('screenExpr').innerText=displayExpr+' =';
     input=result; screenEl.innerText=result;
   } catch(err){ screenEl.innerText='Error'; input=''; }
 }
+
 function calcPercent(){
   try{
     if(!input||input==='0') return;
-    let result=(parseFloat(input)/100).toString();
+    let val=parseFloat(eval(input));
+    let result=(val/100).toString();
     addToHistory(input+'%',result);
     input=result; screenEl.innerText=input;
   } catch{}
 }
+
+// ===== MEMORY =====
 function memoryClear(){ memory=0; }
-function memoryAdd(){ memory+=parseFloat(input)||0; }
-function memorySub(){ memory-=parseFloat(input)||0; }
+function memoryAdd(){ try{ memory+=parseFloat(eval(input))||0; }catch{} }
+function memorySub(){ try{ memory-=parseFloat(eval(input))||0; }catch{} }
 function memoryRecall(){ input=memory.toString(); screenEl.innerText=input; }
 
-// SCIENTIFIC — FIX: handle empty/zero input gracefully, show proper error messages
-function sciFunc(fn){
-  // FIX: treat '0' and '' both as 0
-  let raw = (input===''||input==='0') ? '0' : input;
-  let val = parseFloat(raw);
+// ===== DEG / RAD =====
+function toggleDegRad(){
+  isDeg=!isDeg;
+  document.getElementById('degRadBtn').innerText=isDeg?'Deg':'Rad';
+}
 
-  // FIX: if val is NaN but input has operators (e.g. "3+4"), eval first
-  if(isNaN(val) && raw!==''){
-    try{ val=parseFloat(eval(raw)); } catch{ screenEl.innerText='Error'; return; }
-  }
-  if(isNaN(val)){ screenEl.innerText='Error'; return; }
+// ===== INV toggle =====
+function toggleInv(){
+  isInv=!isInv;
+  document.getElementById('invBtn').style.background=isInv?'#4a90e2':'';
+  document.getElementById('invBtn').style.color=isInv?'white':'#f7a07e';
+}
+
+// ===== FACTORIAL =====
+function factorial(n){
+  n=Math.round(n);
+  if(n<0) return NaN;
+  if(n===0||n===1) return 1;
+  if(n>170) return Infinity;
+  let r=1; for(let i=2;i<=n;i++) r*=i; return r;
+}
+
+// ===== SCIENTIFIC FUNCTIONS =====
+function sciFunc(fn){
+  let raw=(input===''||input==='0')?'0':input;
+  let val;
+  try{ val=parseFloat(eval(raw)); } catch{ screenEl.innerText='Error'; return; }
+  if(isNaN(val)){screenEl.innerText='Error';return;}
+
+  let toRad=isDeg?(Math.PI/180):1;
+  let fromRad=isDeg?(180/Math.PI):1;
 
   let result, displayExpr;
   try{
     switch(fn){
+      // Normal trig
       case 'sin':
-        result=Math.sin(val*Math.PI/180);
-        displayExpr=`sin(${val}°)`;
+        if(isInv){ result=Math.asin(val)*fromRad; displayExpr=`asin(${val})`; }
+        else { result=Math.sin(val*toRad); displayExpr=`sin(${val}${isDeg?'°':'rad'})`; }
         break;
       case 'cos':
-        result=Math.cos(val*Math.PI/180);
-        displayExpr=`cos(${val}°)`;
+        if(isInv){ result=Math.acos(val)*fromRad; displayExpr=`acos(${val})`; }
+        else { result=Math.cos(val*toRad); displayExpr=`cos(${val}${isDeg?'°':'rad'})`; }
         break;
       case 'tan':
-        // FIX: tan(90) is undefined, handle it
-        if(val%180===90){ screenEl.innerText='Undefined'; return; }
-        result=Math.tan(val*Math.PI/180);
-        displayExpr=`tan(${val}°)`;
+        if(isInv){ result=Math.atan(val)*fromRad; displayExpr=`atan(${val})`; }
+        else {
+          if(isDeg && val%180===90){screenEl.innerText='Undefined';return;}
+          result=Math.tan(val*toRad);
+          displayExpr=`tan(${val}${isDeg?'°':'rad'})`;
+        }
         break;
       case 'log':
-        if(val<=0){ screenEl.innerText='Invalid (log≤0)'; return; }
-        result=Math.log10(val);
-        displayExpr=`log(${val})`;
+        if(val<=0){screenEl.innerText='Invalid';return;}
+        if(isInv){ result=Math.pow(10,val); displayExpr=`10^${val}`; }
+        else { result=Math.log10(val); displayExpr=`log(${val})`; }
         break;
       case 'ln':
-        if(val<=0){ screenEl.innerText='Invalid (ln≤0)'; return; }
-        result=Math.log(val);
-        displayExpr=`ln(${val})`;
+        if(val<=0){screenEl.innerText='Invalid';return;}
+        if(isInv){ result=Math.exp(val); displayExpr=`e^${val}`; }
+        else { result=Math.log(val); displayExpr=`ln(${val})`; }
         break;
       case 'sqrt':
-        if(val<0){ screenEl.innerText='Invalid (√<0)'; return; }
-        result=Math.sqrt(val);
-        displayExpr=`√(${val})`;
+        if(val<0){screenEl.innerText='Invalid';return;}
+        result=Math.sqrt(val); displayExpr=`√(${val})`;
+        break;
+      case 'nthroot':
+        // ʸ√x: prompt for y, then calc
+        let y=prompt('Kaun si root? (e.g. 3 for cube root)','3');
+        if(!y) return;
+        y=parseFloat(y);
+        if(isNaN(y)||y===0){screenEl.innerText='Invalid';return;}
+        result=Math.pow(val,1/y); displayExpr=`${y}√(${val})`;
         break;
       case 'sq':
-        result=val*val;
-        displayExpr=`${val}²`;
+        result=val*val; displayExpr=`${val}²`;
+        break;
+      case 'cube':
+        result=val*val*val; displayExpr=`${val}³`;
         break;
       case 'inv':
-        if(val===0){ screenEl.innerText='Divide by 0'; return; }
-        result=1/val;
-        displayExpr=`1/${val}`;
+        if(val===0){screenEl.innerText='Div/0';return;}
+        result=1/val; displayExpr=`1/${val}`;
         break;
       case 'abs':
-        result=Math.abs(val);
-        displayExpr=`|${val}|`;
+        result=Math.abs(val); displayExpr=`|${val}|`;
         break;
-      default:
-        return;
+      case 'fact':
+        if(val<0||!Number.isInteger(val)){screenEl.innerText='Invalid';return;}
+        result=factorial(val);
+        if(!isFinite(result)){screenEl.innerText='Too Large';return;}
+        displayExpr=`${val}!`;
+        break;
+      default: return;
     }
+    if(result===undefined||!isFinite(result)){screenEl.innerText='Error';return;}
     result=parseFloat(result.toFixed(10)).toString();
-    addToHistory(displayExpr, result);
+    addToHistory(displayExpr,result);
     document.getElementById('screenExpr').innerText=displayExpr+' =';
     input=result;
     screenEl.innerText=result;
+    // Reset inv after use
+    if(isInv){ isInv=false; document.getElementById('invBtn').style.background=''; document.getElementById('invBtn').style.color='#f7a07e'; }
   } catch(e){
-    screenEl.innerText='Error';
-    input='';
+    screenEl.innerText='Error'; input='';
   }
 }
 
-// CONVERTERS
+// ===== CONVERTERS =====
 const meterMap={Kilometer:1000,Meter:1,Centimeter:0.01,Millimeter:0.001,Mile:1609.34,Yard:0.9144,Foot:0.3048,Inch:0.0254};
-function convertLength(){let v=parseFloat(document.getElementById('valueLen').value);if(isNaN(v))return;let f=document.getElementById('fromLen').value,t=document.getElementById('toLen').value;document.getElementById('resultLen').innerText=parseFloat((v*meterMap[f]/meterMap[t]).toFixed(10));}
+function convertLength(){let v=parseFloat(document.getElementById('valueLen').value);if(isNaN(v))return;let f=document.getElementById('fromLen').value,t=document.getElementById('toLen').value;document.getElementById('resultLen').innerText=parseFloat((v*meterMap[f]/meterMap[t]).toFixed(10))+' '+t;}
 const kgMap={Kilogram:1,Gram:0.001,Milligram:1e-6,Ton:1000,Pound:0.453592,Ounce:0.0283495};
-function convertMass(){let v=parseFloat(document.getElementById('valueMass').value);if(isNaN(v))return;let f=document.getElementById('fromMass').value,t=document.getElementById('toMass').value;document.getElementById('resultMass').innerText=parseFloat((v*kgMap[f]/kgMap[t]).toFixed(10));}
+function convertMass(){let v=parseFloat(document.getElementById('valueMass').value);if(isNaN(v))return;let f=document.getElementById('fromMass').value,t=document.getElementById('toMass').value;document.getElementById('resultMass').innerText=parseFloat((v*kgMap[f]/kgMap[t]).toFixed(10))+' '+t;}
 
-// CURRENCY
+// ===== CURRENCY =====
 const allCurrencies=[{code:'AED',name:'UAE Dirham',flag:'🇦🇪'},{code:'AFN',name:'Afghan Afghani',flag:'🇦🇫'},{code:'ALL',name:'Albanian Lek',flag:'🇦🇱'},{code:'AMD',name:'Armenian Dram',flag:'🇦🇲'},{code:'ANG',name:'Netherlands Antillean Guilder',flag:'🇳🇱'},{code:'AOA',name:'Angolan Kwanza',flag:'🇦🇴'},{code:'ARS',name:'Argentine Peso',flag:'🇦🇷'},{code:'AUD',name:'Australian Dollar',flag:'🇦🇺'},{code:'AWG',name:'Aruban Florin',flag:'🇦🇼'},{code:'AZN',name:'Azerbaijani Manat',flag:'🇦🇿'},{code:'BAM',name:'Bosnian Mark',flag:'🇧🇦'},{code:'BBD',name:'Barbadian Dollar',flag:'🇧🇧'},{code:'BDT',name:'Bangladeshi Taka',flag:'🇧🇩'},{code:'BGN',name:'Bulgarian Lev',flag:'🇧🇬'},{code:'BHD',name:'Bahraini Dinar',flag:'🇧🇭'},{code:'BIF',name:'Burundian Franc',flag:'🇧🇮'},{code:'BMD',name:'Bermudian Dollar',flag:'🇧🇲'},{code:'BND',name:'Brunei Dollar',flag:'🇧🇳'},{code:'BOB',name:'Bolivian Boliviano',flag:'🇧🇴'},{code:'BRL',name:'Brazilian Real',flag:'🇧🇷'},{code:'BSD',name:'Bahamian Dollar',flag:'🇧🇸'},{code:'BTN',name:'Bhutanese Ngultrum',flag:'🇧🇹'},{code:'BWP',name:'Botswanan Pula',flag:'🇧🇼'},{code:'BYN',name:'Belarusian Ruble',flag:'🇧🇾'},{code:'BZD',name:'Belize Dollar',flag:'🇧🇿'},{code:'CAD',name:'Canadian Dollar',flag:'🇨🇦'},{code:'CDF',name:'Congolese Franc',flag:'🇨🇩'},{code:'CHF',name:'Swiss Franc',flag:'🇨🇭'},{code:'CLP',name:'Chilean Peso',flag:'🇨🇱'},{code:'CNY',name:'Chinese Yuan',flag:'🇨🇳'},{code:'COP',name:'Colombian Peso',flag:'🇨🇴'},{code:'CRC',name:'Costa Rican Colon',flag:'🇨🇷'},{code:'CUP',name:'Cuban Peso',flag:'🇨🇺'},{code:'CVE',name:'Cape Verdean Escudo',flag:'🇨🇻'},{code:'CZK',name:'Czech Koruna',flag:'🇨🇿'},{code:'DJF',name:'Djiboutian Franc',flag:'🇩🇯'},{code:'DKK',name:'Danish Krone',flag:'🇩🇰'},{code:'DOP',name:'Dominican Peso',flag:'🇩🇴'},{code:'DZD',name:'Algerian Dinar',flag:'🇩🇿'},{code:'EGP',name:'Egyptian Pound',flag:'🇪🇬'},{code:'ERN',name:'Eritrean Nakfa',flag:'🇪🇷'},{code:'ETB',name:'Ethiopian Birr',flag:'🇪🇹'},{code:'EUR',name:'Euro',flag:'🇪🇺'},{code:'FJD',name:'Fijian Dollar',flag:'🇫🇯'},{code:'GBP',name:'British Pound',flag:'🇬🇧'},{code:'GEL',name:'Georgian Lari',flag:'🇬🇪'},{code:'GHS',name:'Ghanaian Cedi',flag:'🇬🇭'},{code:'GMD',name:'Gambian Dalasi',flag:'🇬🇲'},{code:'GNF',name:'Guinean Franc',flag:'🇬🇳'},{code:'GTQ',name:'Guatemalan Quetzal',flag:'🇬🇹'},{code:'GYD',name:'Guyanese Dollar',flag:'🇬🇾'},{code:'HKD',name:'Hong Kong Dollar',flag:'🇭🇰'},{code:'HNL',name:'Honduran Lempira',flag:'🇭🇳'},{code:'HRK',name:'Croatian Kuna',flag:'🇭🇷'},{code:'HTG',name:'Haitian Gourde',flag:'🇭🇹'},{code:'HUF',name:'Hungarian Forint',flag:'🇭🇺'},{code:'IDR',name:'Indonesian Rupiah',flag:'🇮🇩'},{code:'ILS',name:'Israeli Shekel',flag:'🇮🇱'},{code:'INR',name:'Indian Rupee',flag:'🇮🇳'},{code:'IQD',name:'Iraqi Dinar',flag:'🇮🇶'},{code:'IRR',name:'Iranian Rial',flag:'🇮🇷'},{code:'ISK',name:'Icelandic Krona',flag:'🇮🇸'},{code:'JMD',name:'Jamaican Dollar',flag:'🇯🇲'},{code:'JOD',name:'Jordanian Dinar',flag:'🇯🇴'},{code:'JPY',name:'Japanese Yen',flag:'🇯🇵'},{code:'KES',name:'Kenyan Shilling',flag:'🇰🇪'},{code:'KGS',name:'Kyrgyzstani Som',flag:'🇰🇬'},{code:'KHR',name:'Cambodian Riel',flag:'🇰🇭'},{code:'KMF',name:'Comorian Franc',flag:'🇰🇲'},{code:'KPW',name:'North Korean Won',flag:'🇰🇵'},{code:'KRW',name:'South Korean Won',flag:'🇰🇷'},{code:'KWD',name:'Kuwaiti Dinar',flag:'🇰🇼'},{code:'KYD',name:'Cayman Islands Dollar',flag:'🇰🇾'},{code:'KZT',name:'Kazakhstani Tenge',flag:'🇰🇿'},{code:'LAK',name:'Laotian Kip',flag:'🇱🇦'},{code:'LBP',name:'Lebanese Pound',flag:'🇱🇧'},{code:'LKR',name:'Sri Lankan Rupee',flag:'🇱🇰'},{code:'LRD',name:'Liberian Dollar',flag:'🇱🇷'},{code:'LSL',name:'Lesotho Loti',flag:'🇱🇸'},{code:'LYD',name:'Libyan Dinar',flag:'🇱🇾'},{code:'MAD',name:'Moroccan Dirham',flag:'🇲🇦'},{code:'MDL',name:'Moldovan Leu',flag:'🇲🇩'},{code:'MGA',name:'Malagasy Ariary',flag:'🇲🇬'},{code:'MKD',name:'Macedonian Denar',flag:'🇲🇰'},{code:'MMK',name:'Myanmar Kyat',flag:'🇲🇲'},{code:'MNT',name:'Mongolian Tugrik',flag:'🇲🇳'},{code:'MOP',name:'Macanese Pataca',flag:'🇲🇴'},{code:'MRU',name:'Mauritanian Ouguiya',flag:'🇲🇷'},{code:'MUR',name:'Mauritian Rupee',flag:'🇲🇺'},{code:'MVR',name:'Maldivian Rufiyaa',flag:'🇲🇻'},{code:'MWK',name:'Malawian Kwacha',flag:'🇲🇼'},{code:'MXN',name:'Mexican Peso',flag:'🇲🇽'},{code:'MYR',name:'Malaysian Ringgit',flag:'🇲🇾'},{code:'MZN',name:'Mozambican Metical',flag:'🇲🇿'},{code:'NAD',name:'Namibian Dollar',flag:'🇳🇦'},{code:'NGN',name:'Nigerian Naira',flag:'🇳🇬'},{code:'NIO',name:'Nicaraguan Cordoba',flag:'🇳🇮'},{code:'NOK',name:'Norwegian Krone',flag:'🇳🇴'},{code:'NPR',name:'Nepalese Rupee',flag:'🇳🇵'},{code:'NZD',name:'New Zealand Dollar',flag:'🇳🇿'},{code:'OMR',name:'Omani Rial',flag:'🇴🇲'},{code:'PAB',name:'Panamanian Balboa',flag:'🇵🇦'},{code:'PEN',name:'Peruvian Sol',flag:'🇵🇪'},{code:'PGK',name:'Papua New Guinean Kina',flag:'🇵🇬'},{code:'PHP',name:'Philippine Peso',flag:'🇵🇭'},{code:'PKR',name:'Pakistani Rupee',flag:'🇵🇰'},{code:'PLN',name:'Polish Zloty',flag:'🇵🇱'},{code:'PYG',name:'Paraguayan Guarani',flag:'🇵🇾'},{code:'QAR',name:'Qatari Riyal',flag:'🇶🇦'},{code:'RON',name:'Romanian Leu',flag:'🇷🇴'},{code:'RSD',name:'Serbian Dinar',flag:'🇷🇸'},{code:'RUB',name:'Russian Ruble',flag:'🇷🇺'},{code:'RWF',name:'Rwandan Franc',flag:'🇷🇼'},{code:'SAR',name:'Saudi Riyal',flag:'🇸🇦'},{code:'SBD',name:'Solomon Islands Dollar',flag:'🇸🇧'},{code:'SCR',name:'Seychellois Rupee',flag:'🇸🇨'},{code:'SDG',name:'Sudanese Pound',flag:'🇸🇩'},{code:'SEK',name:'Swedish Krona',flag:'🇸🇪'},{code:'SGD',name:'Singapore Dollar',flag:'🇸🇬'},{code:'SLL',name:'Sierra Leonean Leone',flag:'🇸🇱'},{code:'SOS',name:'Somali Shilling',flag:'🇸🇴'},{code:'SRD',name:'Surinamese Dollar',flag:'🇸🇷'},{code:'STN',name:'Sao Tomean Dobra',flag:'🇸🇹'},{code:'SVC',name:'Salvadoran Colon',flag:'🇸🇻'},{code:'SYP',name:'Syrian Pound',flag:'🇸🇾'},{code:'SZL',name:'Swazi Lilangeni',flag:'🇸🇿'},{code:'THB',name:'Thai Baht',flag:'🇹🇭'},{code:'TJS',name:'Tajikistani Somoni',flag:'🇹🇯'},{code:'TMT',name:'Turkmenistani Manat',flag:'🇹🇲'},{code:'TND',name:'Tunisian Dinar',flag:'🇹🇳'},{code:'TOP',name:'Tongan Paanga',flag:'🇹🇴'},{code:'TRY',name:'Turkish Lira',flag:'🇹🇷'},{code:'TTD',name:'Trinidad & Tobago Dollar',flag:'🇹🇹'},{code:'TWD',name:'Taiwanese Dollar',flag:'🇹🇼'},{code:'TZS',name:'Tanzanian Shilling',flag:'🇹🇿'},{code:'UAH',name:'Ukrainian Hryvnia',flag:'🇺🇦'},{code:'UGX',name:'Ugandan Shilling',flag:'🇺🇬'},{code:'USD',name:'US Dollar',flag:'🇺🇸'},{code:'UYU',name:'Uruguayan Peso',flag:'🇺🇾'},{code:'UZS',name:'Uzbekistani Som',flag:'🇺🇿'},{code:'VES',name:'Venezuelan Bolivar',flag:'🇻🇪'},{code:'VND',name:'Vietnamese Dong',flag:'🇻🇳'},{code:'VUV',name:'Vanuatu Vatu',flag:'🇻🇺'},{code:'WST',name:'Samoan Tala',flag:'🇼🇸'},{code:'XAF',name:'Central African CFA Franc',flag:'🌍'},{code:'XOF',name:'West African CFA Franc',flag:'🌍'},{code:'YER',name:'Yemeni Rial',flag:'🇾🇪'},{code:'ZAR',name:'South African Rand',flag:'🇿🇦'},{code:'ZMW',name:'Zambian Kwacha',flag:'🇿🇲'},{code:'ZWL',name:'Zimbabwean Dollar',flag:'🇿🇼'}];
-let selectedFrom='PKR',selectedTo='USD',rates={};
+let selectedFrom='PKR', selectedTo='OMR', rates={};
 function buildList(type,filter=''){
-  const listEl=document.getElementById(type+'List');listEl.innerHTML='';
+  const listEl=document.getElementById(type+'List'); listEl.innerHTML='';
   allCurrencies.filter(c=>(c.code+c.name).toLowerCase().includes(filter.toLowerCase())).forEach(c=>{
-    const div=document.createElement('div');div.className='dropdown-item'+((type==='from'?selectedFrom:selectedTo)===c.code?' selected':'');
-    div.innerText=c.flag+' '+c.code+' - '+c.name;div.onclick=()=>{selectCurrency(type,c.code,c.flag+' '+c.code+' - '+c.name);};listEl.appendChild(div);
+    const div=document.createElement('div'); div.className='dropdown-item'+((type==='from'?selectedFrom:selectedTo)===c.code?' selected':'');
+    div.innerText=c.flag+' '+c.code+' - '+c.name; div.onclick=()=>{ selectCurrency(type,c.code,c.flag+' '+c.code+' - '+c.name); }; listEl.appendChild(div);
   });
 }
 function toggleDropdown(type){const dd=document.getElementById(type+'Dropdown');document.querySelectorAll('.dropdown-list').forEach(el=>{if(el!==dd)el.classList.remove('open');});dd.classList.toggle('open');if(dd.classList.contains('open')){buildList(type);dd.querySelector('.search-box').focus();}}
@@ -389,11 +547,19 @@ async function loadRates(){
   const apis=['https://api.frankfurter.app/latest?from=USD','https://open.er-api.com/v6/latest/USD','https://api.exchangerate-api.com/v4/latest/USD'];
   for(let url of apis){try{let res=await fetch(url);let data=await res.json();if(data.rates){rates=data.rates;rates['USD']=1;document.getElementById('rateStatus').innerHTML='✅ Live rates updated!';document.getElementById('rateInfo').innerText='Updated: '+new Date().toLocaleTimeString();setTimeout(()=>{document.getElementById('rateStatus').style.display='none';},3000);convertCurrency();return;}}catch(e){continue;}}
   document.getElementById('rateStatus').innerHTML='⚠️ Offline rates use ho rahi hain';
-  rates={USD:1,PKR:278,EUR:0.92,GBP:0.79,AED:3.67,SAR:3.75,INR:83.5,CAD:1.36,AUD:1.53,JPY:149,CNY:7.24,CHF:0.89,KWD:0.31,QAR:3.64,TRY:32.5,BDT:110,MYR:4.7,SGD:1.34,NGN:1550,EGP:48,IQD:1309,IRR:42000,JOD:0.71,LBP:89500,LYD:4.83,MAD:10.1,OMR:0.38,TND:3.13,YER:250,DZD:134,SDG:601,ZAR:18.6,KES:129,GHS:15.3,TZS:2500,UGX:3750,ETB:56,XAF:600,XOF:600,ZMW:26};
+  rates={USD:1,PKR:278,EUR:0.92,GBP:0.79,AED:3.67,SAR:3.75,INR:83.5,CAD:1.36,AUD:1.53,JPY:149,CNY:7.24,CHF:0.89,KWD:0.31,QAR:3.64,OMR:0.38,TRY:32.5,BDT:110,MYR:4.7,SGD:1.34,NGN:1550,EGP:48,IQD:1309,IRR:42000,JOD:0.71,LBP:89500,LYD:4.83,MAD:10.1,TND:3.13,YER:250,DZD:134,SDG:601,ZAR:18.6,KES:129,GHS:15.3,TZS:2500,UGX:3750,ETB:56,XAF:600,XOF:600,ZMW:26};
   convertCurrency();
 }
 function convertCurrency(){let v=parseFloat(document.getElementById('valueCurr').value);if(isNaN(v)||!rates.USD)return;let inUSD=v/rates[selectedFrom];let result=inUSD*rates[selectedTo];document.getElementById('resultCurr').innerText=result.toFixed(4)+' '+selectedTo;document.getElementById('rateInfo').innerText='1 '+selectedFrom+' = '+(rates[selectedTo]/rates[selectedFrom]).toFixed(6)+' '+selectedTo;}
-loadRates();setInterval(loadRates,600000);
+loadRates(); setInterval(loadRates,600000);
+
+// ===== WHATSAPP =====
+function openWhatsApp(){
+  // APNA WHATSAPP NUMBER YAHAN DAALEN (country code ke saath, no + or spaces)
+  const number = '96891234567'; // <-- YE BADLAIN APNE NUMBER SE
+  const msg = encodeURIComponent('Salam! CalcFlash app ke baare mein rabta karna tha.');
+  window.open('https://wa.me/'+number+'?text='+msg,'_blank');
+}
 </script>
 </body>
 </html>
