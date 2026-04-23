@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -7,69 +7,29 @@
 <title>CalcFlash ⚡ Pro</title>
 <style>
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0; }
-
-/* ===== THEME VARIABLES ===== */
 :root[data-theme="dark"]{
-  --bg:#0f0f0f;
-  --surface:#1c1c1e;
-  --surface2:#2c2c2e;
-  --surface3:#3a3a3c;
-  --btn-num:#2c2c2e;
-  --btn-num-text:#ffffff;
-  --screen-bg:#000;
-  --screen-text:#ffffff;
-  --text-main:#ffffff;
-  --text-muted:#aaaaaa;
-  --text-dim:#666666;
-  --border:#3a3a3c;
-  --sci-bg:#1a2535;
-  --sci-text:#7eb8f7;
-  --sci-active:#2a3f5a;
-  --inv-bg:#2d1e0e;
-  --inv-text:#f7a07e;
-  --mode-bg:#1e2d40;
-  --mode-text:#7eb8f7;
+  --bg:#0f0f0f; --surface:#1c1c1e; --surface2:#2c2c2e; --surface3:#3a3a3c;
+  --btn-num:#2c2c2e; --btn-num-text:#ffffff; --screen-bg:#000; --screen-text:#ffffff;
+  --text-main:#ffffff; --text-muted:#aaaaaa; --text-dim:#666666; --border:#3a3a3c;
+  --sci-bg:#1a2535; --sci-text:#7eb8f7; --sci-active:#2a3f5a;
+  --inv-bg:#2d1e0e; --inv-text:#f7a07e; --mode-bg:#1e2d40; --mode-text:#7eb8f7;
   --history-empty:#444444;
 }
 :root[data-theme="light"]{
-  --bg:#f0f0f5;
-  --surface:#ffffff;
-  --surface2:#e8e8ed;
-  --surface3:#d1d1d6;
-  --btn-num:#e8e8ed;
-  --btn-num-text:#1c1c1e;
-  --screen-bg:#1c1c1e;
-  --screen-text:#ffffff;
-  --text-main:#1c1c1e;
-  --text-muted:#555555;
-  --text-dim:#999999;
-  --border:#c8c8cc;
-  --sci-bg:#ddeeff;
-  --sci-text:#1a5fa8;
-  --sci-active:#bbd6f2;
-  --inv-bg:#fff0e0;
-  --inv-text:#b05a00;
-  --mode-bg:#ddeeff;
-  --mode-text:#1a5fa8;
+  --bg:#f0f0f5; --surface:#ffffff; --surface2:#e8e8ed; --surface3:#d1d1d6;
+  --btn-num:#e8e8ed; --btn-num-text:#1c1c1e; --screen-bg:#1c1c1e; --screen-text:#ffffff;
+  --text-main:#1c1c1e; --text-muted:#555555; --text-dim:#999999; --border:#c8c8cc;
+  --sci-bg:#ddeeff; --sci-text:#1a5fa8; --sci-active:#bbd6f2;
+  --inv-bg:#fff0e0; --inv-text:#b05a00; --mode-bg:#ddeeff; --mode-text:#1a5fa8;
   --history-empty:#bbbbbb;
 }
-
 html,body{ width:100%; background:var(--bg); font-family:'Courier New',monospace; color:var(--text-main); overflow-x:hidden; transition:background 0.3s,color 0.3s; }
 .container{ width:100%; padding:8px; padding-top:4px; max-width:600px; margin:0 auto; }
-
-/* TOP BAR */
 .topbar{ display:flex; justify-content:space-between; align-items:center; padding:4px 2px 6px 2px; }
 .topbar-title{ font-size:16px; font-weight:bold; color:#4a90e2; letter-spacing:1px; font-family:Arial,sans-serif; }
 .topbar-right{ display:flex; align-items:center; gap:6px; }
-
-/* THEME TOGGLE */
-.theme-toggle{
-  background:var(--surface2); border:none; border-radius:20px; padding:4px 10px;
-  color:var(--text-muted); font-size:16px; cursor:pointer; height:auto; width:auto;
-  display:flex; align-items:center; gap:4px; transition:background 0.2s;
-}
+.theme-toggle{ background:var(--surface2); border:none; border-radius:20px; padding:4px 10px; color:var(--text-muted); font-size:16px; cursor:pointer; height:auto; width:auto; display:flex; align-items:center; gap:4px; transition:background 0.2s; }
 .theme-toggle:active{ opacity:0.7; }
-
 .dots-btn{ background:none; border:none; color:var(--text-muted); font-size:24px; cursor:pointer; padding:4px 8px; border-radius:8px; height:auto; width:auto; line-height:1; letter-spacing:2px; }
 .dots-btn:active{ background:var(--surface2); }
 .menu-wrap{ position:relative; }
@@ -79,26 +39,18 @@ html,body{ width:100%; background:var(--bg); font-family:'Courier New',monospace
 .menu-item:last-child{ border-bottom:none; }
 .menu-item:active{ background:var(--surface2); }
 .menu-item.active{ color:#4a90e2; background:var(--mode-bg); }
-
-/* SCREEN */
 .mode-badge{ display:inline-block; background:var(--mode-bg); color:var(--mode-text); font-size:10px; padding:2px 8px; border-radius:8px; margin-left:6px; vertical-align:middle; font-family:Arial,sans-serif; }
 .deg-badge{ display:inline-block; background:var(--inv-bg); color:var(--inv-text); font-size:10px; padding:2px 8px; border-radius:8px; margin-left:4px; vertical-align:middle; font-family:Arial,sans-serif; cursor:pointer; }
 .screen-expr{ font-size:12px; color:var(--text-dim); text-align:right; padding:0 4px 2px 4px; min-height:16px; font-family:Arial,sans-serif; }
 .screen{ width:100%; min-height:60px; background:var(--screen-bg); color:var(--screen-text); font-size:28px; text-align:right; padding:10px 12px; border-radius:10px; margin-bottom:6px; word-break:break-all; line-height:1.3; font-family:'Courier New',monospace; transition:background 0.3s; }
-
-/* BUTTONS GENERAL */
 button{ height:50px; border:none; border-radius:11px; background:var(--btn-num); color:var(--btn-num-text); font-size:15px; cursor:pointer; touch-action:manipulation; width:100%; font-family:Arial,sans-serif; transition:background 0.1s,color 0.1s; }
 button:active{ opacity:0.7; }
-
-/* BASIC GRID */
 .buttons{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
 .mem{ background:var(--surface3); color:var(--text-muted); font-size:12px; }
 .op{ color:#4a90e2; font-size:17px; }
 .clr{ color:#ff5f57; }
 .eq{ background:#4a90e2; color:white; font-size:22px; }
 .eq:active{ background:#357abd; }
-
-/* SCIENTIFIC LAYOUT */
 .sci-full-grid{ display:none; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:5px; }
 .sci-full-grid.visible{ display:grid; }
 .sf{ height:46px; border-radius:10px; font-size:12px; }
@@ -110,8 +62,6 @@ button:active{ opacity:0.7; }
 .sf-num{ background:var(--btn-num); color:var(--btn-num-text); font-size:16px; }
 .sf-eq{ background:#4a90e2; color:white; font-size:20px; grid-row:span 2; height:96px; }
 .sf-inv{ background:var(--inv-bg); color:var(--inv-text); }
-
-/* HISTORY */
 .history-panel{ background:var(--surface); border-radius:12px; padding:8px; margin-bottom:8px; display:none; font-family:Arial,sans-serif; border:1px solid var(--border); }
 .history-panel.open{ display:block; }
 .history-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
@@ -124,8 +74,6 @@ button:active{ opacity:0.7; }
 .h-expr{ font-size:12px; color:var(--text-dim); }
 .h-result{ font-size:16px; color:#4a90e2; text-align:right; }
 .history-empty{ text-align:center; color:var(--history-empty); font-size:13px; padding:20px; }
-
-/* SECTIONS */
 .section{ margin-top:8px; background:var(--surface); border-radius:12px; padding:8px; font-family:Arial,sans-serif; border:1px solid var(--border); }
 .section h3{ color:var(--text-muted); font-size:11px; margin-bottom:5px; text-transform:uppercase; letter-spacing:1px; }
 input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:14px; font-family:Arial,sans-serif; }
@@ -143,21 +91,120 @@ input[type=number]{ width:100%; padding:6px 10px; margin-bottom:5px; border-radi
 .dropdown-item:hover,.dropdown-item.selected{ background:#4a90e2; color:white; }
 .selected-display{ width:100%; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:13px; cursor:pointer; text-align:left; margin-bottom:2px; font-family:Arial,sans-serif; height:auto; }
 select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text-main); font-size:13px; -webkit-appearance:none; appearance:none; font-family:Arial,sans-serif; }
-
-/* WHATSAPP BUTTON */
-.whatsapp-btn{
-  display:flex; align-items:center; justify-content:center; gap:10px;
-  width:100%; padding:14px; margin-top:12px; margin-bottom:8px;
-  background:linear-gradient(135deg,#25d366,#128c7e);
-  color:white; font-size:15px; font-weight:bold;
-  border:none; border-radius:14px; cursor:pointer;
-  font-family:Arial,sans-serif;
-  box-shadow:0 4px 15px rgba(37,211,102,0.3);
-  transition:all 0.2s; height:auto;
-}
+.whatsapp-btn{ display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:14px; margin-top:12px; margin-bottom:8px; background:linear-gradient(135deg,#25d366,#128c7e); color:white; font-size:15px; font-weight:bold; border:none; border-radius:14px; cursor:pointer; font-family:Arial,sans-serif; box-shadow:0 4px 15px rgba(37,211,102,0.3); transition:all 0.2s; height:auto; }
 .whatsapp-btn:active{ transform:scale(0.97); box-shadow:0 2px 8px rgba(37,211,102,0.2); }
 .whatsapp-icon{ width:24px; height:24px; flex-shrink:0; }
 .whatsapp-sub{ font-size:11px; color:var(--text-dim); text-align:center; margin-bottom:16px; font-family:Arial,sans-serif; }
+
+/* ===== PIPE ROLL CALCULATOR ===== */
+.pipe-section{
+  margin-top:8px;
+  background:var(--surface);
+  border-radius:12px;
+  padding:10px;
+  font-family:Arial,sans-serif;
+  border:2px solid #e67e22;
+}
+.pipe-section h3{
+  color:#e67e22;
+  font-size:12px;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.pipe-label{
+  font-size:11px;
+  color:var(--text-muted);
+  margin-bottom:3px;
+  margin-top:5px;
+}
+.pipe-unit-row{
+  display:grid;
+  grid-template-columns:1fr 80px;
+  gap:5px;
+  margin-bottom:5px;
+}
+.pipe-unit-select{
+  width:100%;
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  color:var(--text-main);
+  font-size:12px;
+  -webkit-appearance:none;
+  appearance:none;
+  font-family:Arial,sans-serif;
+  height:36px;
+}
+.pipe-input{
+  width:100%;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  color:var(--text-main);
+  font-size:14px;
+  font-family:Arial,sans-serif;
+  height:36px;
+  margin-bottom:0;
+}
+.pipe-calc-btn{
+  background:linear-gradient(135deg,#e67e22,#d35400);
+  color:white;
+  width:100%;
+  padding:10px;
+  font-size:14px;
+  border-radius:9px;
+  border:none;
+  cursor:pointer;
+  font-family:Arial,sans-serif;
+  margin-top:8px;
+  height:auto;
+  font-weight:bold;
+}
+.pipe-calc-btn:active{ opacity:0.8; }
+.pipe-divider{
+  height:1px;
+  background:var(--border);
+  margin:8px 0;
+}
+.pipe-result-box{
+  background:var(--surface2);
+  border-radius:10px;
+  padding:10px;
+  margin-top:8px;
+  display:none;
+}
+.pipe-result-box.show{ display:block; }
+.pipe-result-title{
+  font-size:11px;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+.pipe-result-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:5px 0;
+  border-bottom:1px solid var(--border);
+}
+.pipe-result-row:last-child{ border-bottom:none; }
+.pipe-result-label{ font-size:12px; color:var(--text-muted); }
+.pipe-result-val{ font-size:15px; color:#e67e22; font-weight:bold; }
+.pipe-result-val span{ font-size:11px; color:var(--text-dim); margin-left:3px; }
+.pipe-diagram{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:8px 0;
+}
+.pipe-diagram svg{ width:120px; height:120px; }
 </style>
 </head>
 <body>
@@ -170,7 +217,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
       <span class="mode-badge" id="modeBadge">Basic</span>
     </div>
     <div class="topbar-right">
-      <!-- Light/Dark Toggle -->
       <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Light/Dark Mode">🌙</button>
       <div class="menu-wrap">
         <button class="dots-btn" onclick="toggleMenu()">•••</button>
@@ -198,7 +244,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
   <div class="screen-expr" id="screenExpr"></div>
   <div class="screen" id="screen">0</div>
 
-  <!-- ===== SCIENTIFIC FULL LAYOUT ===== -->
+  <!-- Scientific Layout -->
   <div class="sci-full-grid" id="sciFullGrid">
     <button class="sf sf-sci" onclick="pressStr('(')">(</button>
     <button class="sf sf-sci" onclick="pressStr(')')">)</button>
@@ -207,7 +253,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-mem" onclick="memoryAdd()">M+</button>
     <button class="sf sf-mem" onclick="memorySub()">M-</button>
     <button class="sf sf-mem" onclick="memoryRecall()">MR</button>
-
     <button class="sf sf-sci" onclick="sciFunc('sq')">x²</button>
     <button class="sf sf-sci" onclick="sciFunc('cube')">x³</button>
     <button class="sf sf-sci" onclick="pressStr('**')">xʸ</button>
@@ -215,7 +260,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-op" onclick="pressStr('/')">÷</button>
     <button class="sf sf-op" onclick="pressStr('*')">×</button>
     <button class="sf sf-op" onclick="backspace()">⌫</button>
-
     <button class="sf sf-sci" onclick="sciFunc('fact')">x!</button>
     <button class="sf sf-sci" onclick="sciFunc('sqrt')">√</button>
     <button class="sf sf-sci" onclick="sciFunc('nthroot')">ʸ√x</button>
@@ -223,7 +267,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('8')">8</button>
     <button class="sf sf-num" onclick="press('9')">9</button>
     <button class="sf sf-op" onclick="pressStr('-')">−</button>
-
     <button class="sf sf-sci" onclick="insertConst('e')">e</button>
     <button class="sf sf-sci" onclick="sciFunc('ln')">ln</button>
     <button class="sf sf-sci" onclick="sciFunc('log')">lg</button>
@@ -231,7 +274,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('5')">5</button>
     <button class="sf sf-num" onclick="press('6')">6</button>
     <button class="sf sf-op" onclick="pressStr('+')">+</button>
-
     <button class="sf sf-sci" onclick="sciFunc('sin')">sin</button>
     <button class="sf sf-sci" onclick="sciFunc('cos')">cos</button>
     <button class="sf sf-sci" onclick="sciFunc('tan')">tan</button>
@@ -239,7 +281,6 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('2')">2</button>
     <button class="sf sf-num" onclick="press('3')">3</button>
     <button class="sf sf-eq" onclick="calculate()">=</button>
-
     <button class="sf sf-inv" onclick="toggleInv()" id="invBtn">Inv</button>
     <button class="sf sf-inv" onclick="toggleDegRad()" id="degRadBtn">Deg</button>
     <button class="sf sf-sci" onclick="insertConst('pi')">π</button>
@@ -248,7 +289,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <button class="sf sf-num" onclick="press('.')">.</button>
   </div>
 
-  <!-- ===== BASIC LAYOUT ===== -->
+  <!-- Basic Layout -->
   <div id="basicPanel">
     <div class="buttons">
       <button class="mem" onclick="memoryClear()">MC</button>
@@ -274,6 +315,107 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
       <button class="op" onclick="calcPercent()">%</button>
       <button onclick="press('0')">0</button>
       <button onclick="press('.')">.</button>
+    </div>
+  </div>
+
+  <!-- ===== PIPE ROLL CALCULATOR ===== -->
+  <div class="pipe-section">
+    <h3>🔵 Pipe / Roll Calculator</h3>
+
+    <!-- Diagram -->
+    <div class="pipe-diagram">
+      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- OD circle -->
+        <circle cx="60" cy="60" r="52" stroke="#e67e22" stroke-width="2.5" stroke-dasharray="6 3"/>
+        <!-- Thickness ring -->
+        <circle cx="60" cy="60" r="44" stroke="#f39c12" stroke-width="8" opacity="0.3"/>
+        <!-- ID circle -->
+        <circle cx="60" cy="60" r="36" stroke="#4a90e2" stroke-width="2.5"/>
+        <!-- ID label -->
+        <text x="60" y="64" text-anchor="middle" fill="#4a90e2" font-size="11" font-family="Arial">ID</text>
+        <!-- OD label -->
+        <text x="105" y="22" text-anchor="middle" fill="#e67e22" font-size="10" font-family="Arial">OD</text>
+        <!-- Arrow OD -->
+        <line x1="100" y1="25" x2="90" y2="38" stroke="#e67e22" stroke-width="1.5"/>
+        <!-- Thickness label -->
+        <text x="15" y="50" text-anchor="middle" fill="#f39c12" font-size="9" font-family="Arial">Thk</text>
+        <line x1="22" y1="50" x2="36" y2="55" stroke="#f39c12" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <!-- ID Input -->
+    <div class="pipe-label">🔵 ID — Inner Diameter (Andar wala)</div>
+    <div class="pipe-unit-row">
+      <input class="pipe-input" type="number" id="pipeID" placeholder="e.g. 1" oninput="pipeAutoCalc()">
+      <select class="pipe-unit-select" id="pipeIDUnit" onchange="pipeAutoCalc()">
+        <option value="ft">Feet</option>
+        <option value="in">Inch</option>
+        <option value="m">Meter</option>
+        <option value="cm">CM</option>
+        <option value="mm">MM</option>
+      </select>
+    </div>
+
+    <!-- Thickness Input -->
+    <div class="pipe-label">🟡 Thickness — Plate ki motai (ID mein add hogi)</div>
+    <div class="pipe-unit-row">
+      <input class="pipe-input" type="number" id="pipeThk" placeholder="e.g. 0.05" oninput="pipeAutoCalc()">
+      <select class="pipe-unit-select" id="pipeThkUnit" onchange="pipeAutoCalc()">
+        <option value="ft">Feet</option>
+        <option value="in">Inch</option>
+        <option value="m">Meter</option>
+        <option value="cm">CM</option>
+        <option value="mm">MM</option>
+      </select>
+    </div>
+
+    <div class="pipe-divider"></div>
+
+    <!-- OD Input -->
+    <div class="pipe-label">🟠 OD — Outer Diameter (Bahar wala)</div>
+    <div class="pipe-unit-row">
+      <input class="pipe-input" type="number" id="pipeOD" placeholder="e.g. 2" oninput="pipeAutoCalc()">
+      <select class="pipe-unit-select" id="pipeODUnit" onchange="pipeAutoCalc()">
+        <option value="ft">Feet</option>
+        <option value="in">Inch</option>
+        <option value="m">Meter</option>
+        <option value="cm">CM</option>
+        <option value="mm">MM</option>
+      </select>
+    </div>
+
+    <button class="pipe-calc-btn" onclick="calcPipe()">🔄 Calculate Karo</button>
+
+    <!-- Results -->
+    <div class="pipe-result-box" id="pipeResultBox">
+      <div class="pipe-result-title">📐 Natija (Results)</div>
+
+      <div class="pipe-result-row">
+        <div class="pipe-result-label">🔵 ID Plate Length (<span id="lblIDunit1">—</span>)</div>
+        <div class="pipe-result-val" id="resIDft">—</div>
+      </div>
+      <div class="pipe-result-row">
+        <div class="pipe-result-label">🔵 ID Plate Length (MM)</div>
+        <div class="pipe-result-val" id="resIDin">—</div>
+      </div>
+
+      <div class="pipe-divider"></div>
+
+      <div class="pipe-result-row">
+        <div class="pipe-result-label">🟠 OD Plate Length (<span id="lblODunit1">—</span>)</div>
+        <div class="pipe-result-val" id="resODft">—</div>
+      </div>
+      <div class="pipe-result-row">
+        <div class="pipe-result-label">🟠 OD Plate Length (MM)</div>
+        <div class="pipe-result-val" id="resODin">—</div>
+      </div>
+
+      <div class="pipe-divider"></div>
+
+      <div class="pipe-result-row">
+        <div class="pipe-result-label">📏 Formula</div>
+        <div class="pipe-result-val" style="font-size:11px;color:var(--text-dim);" id="resFormula">—</div>
+      </div>
     </div>
   </div>
 
@@ -326,7 +468,7 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
     <div class="rate-info" id="rateInfo"></div>
   </div>
 
-  <!-- WhatsApp Contact -->
+  <!-- WhatsApp -->
   <button class="whatsapp-btn" id="waBtn">
     <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="white">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -338,20 +480,13 @@ select{ width:100%; padding:6px 10px; margin-bottom:5px; border-radius:8px; bord
 </div>
 
 <script>
-// ===== THEME TOGGLE =====
-let isDark = true;
-function toggleTheme(){
-  isDark = !isDark;
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  document.getElementById('themeBtn').innerText = isDark ? '🌙' : '☀️';
-}
+// ===== THEME =====
+let isDark=true;
+function toggleTheme(){isDark=!isDark;document.documentElement.setAttribute('data-theme',isDark?'dark':'light');document.getElementById('themeBtn').innerText=isDark?'🌙':'☀️';}
 
 // ===== MENU =====
 let menuOpen=false;
-function toggleMenu(){
-  menuOpen=!menuOpen;
-  document.getElementById('menuDropdown').classList.toggle('open',menuOpen);
-}
+function toggleMenu(){menuOpen=!menuOpen;document.getElementById('menuDropdown').classList.toggle('open',menuOpen);}
 document.addEventListener('click',e=>{
   if(!e.target.closest('.menu-wrap')){menuOpen=false;document.getElementById('menuDropdown').classList.remove('open');}
   if(!e.target.closest('.custom-select')) document.querySelectorAll('.dropdown-list').forEach(el=>el.classList.remove('open'));
@@ -359,152 +494,34 @@ document.addEventListener('click',e=>{
 
 // ===== MODE =====
 let currentMode='basic';
-function setMode(mode){
-  currentMode=mode;
-  document.getElementById('menuDropdown').classList.remove('open'); menuOpen=false;
-  document.getElementById('sciFullGrid').classList.toggle('visible', mode==='sci');
-  document.getElementById('basicPanel').style.display=(mode==='sci')?'none':'block';
-  document.getElementById('modeBadge').innerText=(mode==='sci')?'Scientific':'Basic';
-  document.getElementById('menuBasic').classList.toggle('active',mode==='basic');
-  document.getElementById('menuSci').classList.toggle('active',mode==='sci');
-}
+function setMode(mode){currentMode=mode;document.getElementById('menuDropdown').classList.remove('open');menuOpen=false;document.getElementById('sciFullGrid').classList.toggle('visible',mode==='sci');document.getElementById('basicPanel').style.display=(mode==='sci')?'none':'block';document.getElementById('modeBadge').innerText=(mode==='sci')?'Scientific':'Basic';document.getElementById('menuBasic').classList.toggle('active',mode==='basic');document.getElementById('menuSci').classList.toggle('active',mode==='sci');}
 
 // ===== HISTORY =====
 let historyData=[],historyOpen=false;
-function toggleHistory(){
-  historyOpen=!historyOpen;
-  document.getElementById('historyPanel').classList.toggle('open',historyOpen);
-  document.getElementById('menuHistory').classList.toggle('active',historyOpen);
-  document.getElementById('menuDropdown').classList.remove('open'); menuOpen=false;
-  renderHistory();
-}
-function addToHistory(expr,result){
-  if(!expr||expr==='0'||result==='Error') return;
-  historyData.unshift({expr,result,time:new Date().toLocaleTimeString()});
-  if(historyData.length>50) historyData.pop();
-  if(historyOpen) renderHistory();
-}
-function renderHistory(){
-  const list=document.getElementById('historyList');
-  if(!historyData.length){list.innerHTML='<div class="history-empty">Abhi koi history nahi hai</div>';return;}
-  list.innerHTML=historyData.map((h,i)=>`<div class="history-item" onclick="useHistory(${i})"><div class="h-expr">${h.expr}</div><div class="h-result">= ${h.result} <span style="font-size:10px;color:var(--text-dim)">${h.time}</span></div></div>`).join('');
-}
-function useHistory(i){
-  input=historyData[i].result;
-  screenEl.innerText=input;
-  document.getElementById('screenExpr').innerText=historyData[i].expr+' =';
-}
-function clearHistory(){ historyData=[]; renderHistory(); }
+function toggleHistory(){historyOpen=!historyOpen;document.getElementById('historyPanel').classList.toggle('open',historyOpen);document.getElementById('menuHistory').classList.toggle('active',historyOpen);document.getElementById('menuDropdown').classList.remove('open');menuOpen=false;renderHistory();}
+function addToHistory(expr,result){if(!expr||expr==='0'||result==='Error')return;historyData.unshift({expr,result,time:new Date().toLocaleTimeString()});if(historyData.length>50)historyData.pop();if(historyOpen)renderHistory();}
+function renderHistory(){const list=document.getElementById('historyList');if(!historyData.length){list.innerHTML='<div class="history-empty">Abhi koi history nahi hai</div>';return;}list.innerHTML=historyData.map((h,i)=>`<div class="history-item" onclick="useHistory(${i})"><div class="h-expr">${h.expr}</div><div class="h-result">= ${h.result} <span style="font-size:10px;color:var(--text-dim)">${h.time}</span></div></div>`).join('');}
+function useHistory(i){input=historyData[i].result;screenEl.innerText=input;document.getElementById('screenExpr').innerText=historyData[i].expr+' =';}
+function clearHistory(){historyData=[];renderHistory();}
 
-// ===== CALCULATOR CORE =====
-let screenEl=document.getElementById('screen'), input='', memory=0;
-let isInv=false, isDeg=true;
-
-function getDisplayText(val){
-  return val.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');
-}
-function press(v){
-  if(input==='0'||input==='') input='';
-  else if(/^-?\d*\.?\d+$/.test(input) && v==='0' && input==='0') return;
-  input+=v; screenEl.innerText=getDisplayText(input);
-  document.getElementById('screenExpr').innerText='';
-}
-function pressStr(v){
-  if(input===''&&(v==='-'||v==='+')){input=v;}
-  else input+=v;
-  screenEl.innerText=getDisplayText(input);
-  document.getElementById('screenExpr').innerText='';
-}
-function insertConst(c){
-  if(input==='0'||input==='') input='';
-  if(c==='pi') input+=String(Math.PI);
-  else if(c==='e') input+=String(Math.E);
-  screenEl.innerText=getDisplayText(input);
-  document.getElementById('screenExpr').innerText='';
-}
-function clearScreen(){ input=''; screenEl.innerText='0'; document.getElementById('screenExpr').innerText=''; }
-function backspace(){
-  input=input.slice(0,-1);
-  if(!input) input='';
-  screenEl.innerText=input||'0';
-}
-function calculate(){
-  try{
-    if(!input||input==='0') return;
-    let displayExpr=getDisplayText(input);
-    let evaled=eval(input);
-    if(!isFinite(evaled)) throw new Error('Infinity');
-    let result=parseFloat(evaled.toFixed(10)).toString();
-    addToHistory(displayExpr,result);
-    document.getElementById('screenExpr').innerText=displayExpr+' =';
-    input=result; screenEl.innerText=result;
-  } catch(err){ screenEl.innerText='Error'; input=''; }
-}
-function calcPercent(){
-  try{
-    if(!input||input==='0') return;
-    let val=parseFloat(eval(input));
-    let result=(val/100).toString();
-    addToHistory(input+'%',result);
-    input=result; screenEl.innerText=input;
-  } catch{}
-}
-
-// ===== MEMORY =====
-function memoryClear(){ memory=0; }
-function memoryAdd(){ try{ memory+=parseFloat(eval(input))||0; }catch{} }
-function memorySub(){ try{ memory-=parseFloat(eval(input))||0; }catch{} }
-function memoryRecall(){ input=memory.toString(); screenEl.innerText=input; }
-
-// ===== DEG / RAD =====
-function toggleDegRad(){
-  isDeg=!isDeg;
-  document.getElementById('degRadBtn').innerText=isDeg?'Deg':'Rad';
-}
-
-// ===== INV toggle =====
-function toggleInv(){
-  isInv=!isInv;
-  document.getElementById('invBtn').style.background=isInv?'#4a90e2':'';
-  document.getElementById('invBtn').style.color=isInv?'white':'';
-}
-
-// ===== FACTORIAL =====
-function factorial(n){
-  n=Math.round(n); if(n<0) return NaN; if(n===0||n===1) return 1;
-  if(n>170) return Infinity; let r=1; for(let i=2;i<=n;i++) r*=i; return r;
-}
-
-// ===== SCIENTIFIC FUNCTIONS =====
-function sciFunc(fn){
-  let raw=(input===''||input==='0')?'0':input;
-  let val; try{ val=parseFloat(eval(raw)); } catch{ screenEl.innerText='Error'; return; }
-  if(isNaN(val)){screenEl.innerText='Error';return;}
-  let toRad=isDeg?(Math.PI/180):1, fromRad=isDeg?(180/Math.PI):1;
-  let result, displayExpr;
-  try{
-    switch(fn){
-      case 'sin': if(isInv){result=Math.asin(val)*fromRad;displayExpr=`asin(${val})`;}else{result=Math.sin(val*toRad);displayExpr=`sin(${val}${isDeg?'°':'rad'})`;} break;
-      case 'cos': if(isInv){result=Math.acos(val)*fromRad;displayExpr=`acos(${val})`;}else{result=Math.cos(val*toRad);displayExpr=`cos(${val}${isDeg?'°':'rad'})`;} break;
-      case 'tan': if(isInv){result=Math.atan(val)*fromRad;displayExpr=`atan(${val})`;}else{if(isDeg&&val%180===90){screenEl.innerText='Undefined';return;}result=Math.tan(val*toRad);displayExpr=`tan(${val}${isDeg?'°':'rad'})`;} break;
-      case 'log': if(val<=0){screenEl.innerText='Invalid';return;} if(isInv){result=Math.pow(10,val);displayExpr=`10^${val}`;}else{result=Math.log10(val);displayExpr=`log(${val})`;} break;
-      case 'ln': if(val<=0){screenEl.innerText='Invalid';return;} if(isInv){result=Math.exp(val);displayExpr=`e^${val}`;}else{result=Math.log(val);displayExpr=`ln(${val})`;} break;
-      case 'sqrt': if(val<0){screenEl.innerText='Invalid';return;} result=Math.sqrt(val);displayExpr=`√(${val})`; break;
-      case 'nthroot': let y=prompt('Kaun si root? (e.g. 3 for cube root)','3'); if(!y) return; y=parseFloat(y); if(isNaN(y)||y===0){screenEl.innerText='Invalid';return;} result=Math.pow(val,1/y);displayExpr=`${y}√(${val})`; break;
-      case 'sq': result=val*val;displayExpr=`${val}²`; break;
-      case 'cube': result=val*val*val;displayExpr=`${val}³`; break;
-      case 'inv': if(val===0){screenEl.innerText='Div/0';return;} result=1/val;displayExpr=`1/${val}`; break;
-      case 'fact': if(val<0||!Number.isInteger(val)){screenEl.innerText='Invalid';return;} result=factorial(val); if(!isFinite(result)){screenEl.innerText='Too Large';return;} displayExpr=`${val}!`; break;
-      default: return;
-    }
-    if(result===undefined||!isFinite(result)){screenEl.innerText='Error';return;}
-    result=parseFloat(result.toFixed(10)).toString();
-    addToHistory(displayExpr,result);
-    document.getElementById('screenExpr').innerText=displayExpr+' =';
-    input=result; screenEl.innerText=result;
-    if(isInv){ isInv=false; document.getElementById('invBtn').style.background=''; document.getElementById('invBtn').style.color=''; }
-  } catch(e){ screenEl.innerText='Error'; input=''; }
-}
+// ===== CALCULATOR =====
+let screenEl=document.getElementById('screen'),input='',memory=0,isInv=false,isDeg=true;
+function getDisplayText(val){return val.replace(/\*\*/g,'ʸ').replace(/Math\.PI/g,'π').replace(/Math\.E/g,'e');}
+function press(v){if(input==='0'||input==='')input='';input+=v;screenEl.innerText=getDisplayText(input);document.getElementById('screenExpr').innerText='';}
+function pressStr(v){if(input===''&&(v==='-'||v==='+'))input=v;else input+=v;screenEl.innerText=getDisplayText(input);document.getElementById('screenExpr').innerText='';}
+function insertConst(c){if(input==='0'||input==='')input='';if(c==='pi')input+=String(Math.PI);else if(c==='e')input+=String(Math.E);screenEl.innerText=getDisplayText(input);document.getElementById('screenExpr').innerText='';}
+function clearScreen(){input='';screenEl.innerText='0';document.getElementById('screenExpr').innerText='';}
+function backspace(){input=input.slice(0,-1);if(!input)input='';screenEl.innerText=input||'0';}
+function calculate(){try{if(!input||input==='0')return;let displayExpr=getDisplayText(input);let evaled=eval(input);if(!isFinite(evaled))throw new Error('Infinity');let result=parseFloat(evaled.toFixed(10)).toString();addToHistory(displayExpr,result);document.getElementById('screenExpr').innerText=displayExpr+' =';input=result;screenEl.innerText=result;}catch(err){screenEl.innerText='Error';input='';}}
+function calcPercent(){try{if(!input||input==='0')return;let val=parseFloat(eval(input));let result=(val/100).toString();addToHistory(input+'%',result);input=result;screenEl.innerText=input;}catch{}}
+function memoryClear(){memory=0;}
+function memoryAdd(){try{memory+=parseFloat(eval(input))||0;}catch{}}
+function memorySub(){try{memory-=parseFloat(eval(input))||0;}catch{}}
+function memoryRecall(){input=memory.toString();screenEl.innerText=input;}
+function toggleDegRad(){isDeg=!isDeg;document.getElementById('degRadBtn').innerText=isDeg?'Deg':'Rad';}
+function toggleInv(){isInv=!isInv;document.getElementById('invBtn').style.background=isInv?'#4a90e2':'';document.getElementById('invBtn').style.color=isInv?'white':'';}
+function factorial(n){n=Math.round(n);if(n<0)return NaN;if(n===0||n===1)return 1;if(n>170)return Infinity;let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
+function sciFunc(fn){let raw=(input===''||input==='0')?'0':input;let val;try{val=parseFloat(eval(raw));}catch{screenEl.innerText='Error';return;}if(isNaN(val)){screenEl.innerText='Error';return;}let toRad=isDeg?(Math.PI/180):1,fromRad=isDeg?(180/Math.PI):1;let result,displayExpr;try{switch(fn){case 'sin':if(isInv){result=Math.asin(val)*fromRad;displayExpr=`asin(${val})`;}else{result=Math.sin(val*toRad);displayExpr=`sin(${val}${isDeg?'°':'rad'})`;}break;case 'cos':if(isInv){result=Math.acos(val)*fromRad;displayExpr=`acos(${val})`;}else{result=Math.cos(val*toRad);displayExpr=`cos(${val}${isDeg?'°':'rad'})`;}break;case 'tan':if(isInv){result=Math.atan(val)*fromRad;displayExpr=`atan(${val})`;}else{if(isDeg&&val%180===90){screenEl.innerText='Undefined';return;}result=Math.tan(val*toRad);displayExpr=`tan(${val}${isDeg?'°':'rad'})`;}break;case 'log':if(val<=0){screenEl.innerText='Invalid';return;}if(isInv){result=Math.pow(10,val);displayExpr=`10^${val}`;}else{result=Math.log10(val);displayExpr=`log(${val})`;}break;case 'ln':if(val<=0){screenEl.innerText='Invalid';return;}if(isInv){result=Math.exp(val);displayExpr=`e^${val}`;}else{result=Math.log(val);displayExpr=`ln(${val})`;}break;case 'sqrt':if(val<0){screenEl.innerText='Invalid';return;}result=Math.sqrt(val);displayExpr=`√(${val})`;break;case 'nthroot':let y=prompt('Kaun si root? (e.g. 3 for cube root)','3');if(!y)return;y=parseFloat(y);if(isNaN(y)||y===0){screenEl.innerText='Invalid';return;}result=Math.pow(val,1/y);displayExpr=`${y}√(${val})`;break;case 'sq':result=val*val;displayExpr=`${val}²`;break;case 'cube':result=val*val*val;displayExpr=`${val}³`;break;case 'inv':if(val===0){screenEl.innerText='Div/0';return;}result=1/val;displayExpr=`1/${val}`;break;case 'fact':if(val<0||!Number.isInteger(val)){screenEl.innerText='Invalid';return;}result=factorial(val);if(!isFinite(result)){screenEl.innerText='Too Large';return;}displayExpr=`${val}!`;break;default:return;}if(result===undefined||!isFinite(result)){screenEl.innerText='Error';return;}result=parseFloat(result.toFixed(10)).toString();addToHistory(displayExpr,result);document.getElementById('screenExpr').innerText=displayExpr+' =';input=result;screenEl.innerText=result;if(isInv){isInv=false;document.getElementById('invBtn').style.background='';document.getElementById('invBtn').style.color='';}}catch(e){screenEl.innerText='Error';input='';}}
 
 // ===== CONVERTERS =====
 const meterMap={Kilometer:1000,Meter:1,Centimeter:0.01,Millimeter:0.001,Mile:1609.34,Yard:0.9144,Foot:0.3048,Inch:0.0254};
@@ -512,47 +529,122 @@ function convertLength(){let v=parseFloat(document.getElementById('valueLen').va
 const kgMap={Kilogram:1,Gram:0.001,Milligram:1e-6,Ton:1000,Pound:0.453592,Ounce:0.0283495};
 function convertMass(){let v=parseFloat(document.getElementById('valueMass').value);if(isNaN(v))return;let f=document.getElementById('fromMass').value,t=document.getElementById('toMass').value;document.getElementById('resultMass').innerText=parseFloat((v*kgMap[f]/kgMap[t]).toFixed(10))+' '+t;}
 
+// ===== PIPE ROLL CALCULATOR =====
+
+// Unit names for display
+const unitNames = {ft:'Feet', in:'Inches', m:'Meter', cm:'CM', mm:'MM'};
+
+// Convert any unit to MM (base unit)
+function toMM(val, unit){
+  switch(unit){
+    case 'ft': return val * 304.8;
+    case 'in': return val * 25.4;
+    case 'm':  return val * 1000;
+    case 'cm': return val * 10;
+    case 'mm': return val;
+    default:   return val;
+  }
+}
+
+// Convert MM back to target unit
+function fromMM(mm, unit){
+  switch(unit){
+    case 'ft': return mm / 304.8;
+    case 'in': return mm / 25.4;
+    case 'm':  return mm / 1000;
+    case 'cm': return mm / 10;
+    case 'mm': return mm;
+    default:   return mm;
+  }
+}
+
+function fmt(v, unit){ return v.toFixed(4) + ' ' + unit; }
+
+function pipeAutoCalc(){
+  const id = parseFloat(document.getElementById('pipeID').value);
+  const od = parseFloat(document.getElementById('pipeOD').value);
+  if(!isNaN(id) || !isNaN(od)) calcPipe();
+}
+
+function calcPipe(){
+  const idVal  = parseFloat(document.getElementById('pipeID').value);
+  const idUnit = document.getElementById('pipeIDUnit').value;
+  const thkVal = parseFloat(document.getElementById('pipeThk').value);
+  const thkUnit= document.getElementById('pipeThkUnit').value;
+  const odVal  = parseFloat(document.getElementById('pipeOD').value);
+  const odUnit = document.getElementById('pipeODUnit').value;
+
+  const box = document.getElementById('pipeResultBox');
+
+  let hasID = !isNaN(idVal) && idVal > 0;
+  let hasThk= !isNaN(thkVal) && thkVal > 0;
+  let hasOD = !isNaN(odVal) && odVal > 0;
+
+  if(!hasID && !hasOD){ box.classList.remove('show'); return; }
+  box.classList.add('show');
+
+  // ---- ID calculation ----
+  if(hasID){
+    let id_mm  = toMM(idVal, idUnit);
+    let thk_mm = hasThk ? toMM(thkVal, thkUnit) : 0;
+    // Plate length = π × (ID + thickness) — in MM
+    let plate_mm = Math.PI * (id_mm + thk_mm);
+
+    // Result in SAME unit as ID input
+    let plate_orig = fromMM(plate_mm, idUnit);
+    // Result also in MM always
+    let plate_mm_val = plate_mm;
+
+    // Update labels
+    document.getElementById('lblIDunit1').innerText = unitNames[idUnit];
+
+    document.getElementById('resIDft').innerHTML = fmt(plate_orig, idUnit) + '<span>' + unitNames[idUnit] + '</span>';
+    document.getElementById('resIDin').innerHTML = plate_mm_val.toFixed(4) + ' mm<span>MM</span>';
+
+    let formula = `π × (${id_mm.toFixed(2)}mm ID`;
+    if(hasThk) formula += ` + ${thk_mm.toFixed(2)}mm Thk`;
+    formula += `)`;
+    document.getElementById('resFormula').innerText = formula;
+  } else {
+    document.getElementById('resIDft').innerHTML = '—';
+    document.getElementById('resIDin').innerHTML = '—';
+    document.getElementById('lblIDunit1').innerText = '—';
+  }
+
+  // ---- OD calculation ----
+  if(hasOD){
+    let od_mm = toMM(odVal, odUnit);
+    let plate_mm = Math.PI * od_mm;
+
+    // Result in SAME unit as OD input
+    let plate_orig = fromMM(plate_mm, odUnit);
+
+    // Update labels
+    document.getElementById('lblODunit1').innerText = unitNames[odUnit];
+
+    document.getElementById('resODft').innerHTML = fmt(plate_orig, odUnit) + '<span>' + unitNames[odUnit] + '</span>';
+    document.getElementById('resODin').innerHTML = plate_mm.toFixed(4) + ' mm<span>MM</span>';
+  } else {
+    document.getElementById('resODft').innerHTML = '—';
+    document.getElementById('resODin').innerHTML = '—';
+    document.getElementById('lblODunit1').innerText = '—';
+  }
+}
+
 // ===== CURRENCY =====
 const allCurrencies=[{code:'AED',name:'UAE Dirham',flag:'🇦🇪'},{code:'AFN',name:'Afghan Afghani',flag:'🇦🇫'},{code:'ALL',name:'Albanian Lek',flag:'🇦🇱'},{code:'AMD',name:'Armenian Dram',flag:'🇦🇲'},{code:'ANG',name:'Netherlands Antillean Guilder',flag:'🇳🇱'},{code:'AOA',name:'Angolan Kwanza',flag:'🇦🇴'},{code:'ARS',name:'Argentine Peso',flag:'🇦🇷'},{code:'AUD',name:'Australian Dollar',flag:'🇦🇺'},{code:'AWG',name:'Aruban Florin',flag:'🇦🇼'},{code:'AZN',name:'Azerbaijani Manat',flag:'🇦🇿'},{code:'BAM',name:'Bosnian Mark',flag:'🇧🇦'},{code:'BBD',name:'Barbadian Dollar',flag:'🇧🇧'},{code:'BDT',name:'Bangladeshi Taka',flag:'🇧🇩'},{code:'BGN',name:'Bulgarian Lev',flag:'🇧🇬'},{code:'BHD',name:'Bahraini Dinar',flag:'🇧🇭'},{code:'BIF',name:'Burundian Franc',flag:'🇧🇮'},{code:'BMD',name:'Bermudian Dollar',flag:'🇧🇲'},{code:'BND',name:'Brunei Dollar',flag:'🇧🇳'},{code:'BOB',name:'Bolivian Boliviano',flag:'🇧🇴'},{code:'BRL',name:'Brazilian Real',flag:'🇧🇷'},{code:'BSD',name:'Bahamian Dollar',flag:'🇧🇸'},{code:'BTN',name:'Bhutanese Ngultrum',flag:'🇧🇹'},{code:'BWP',name:'Botswanan Pula',flag:'🇧🇼'},{code:'BYN',name:'Belarusian Ruble',flag:'🇧🇾'},{code:'BZD',name:'Belize Dollar',flag:'🇧🇿'},{code:'CAD',name:'Canadian Dollar',flag:'🇨🇦'},{code:'CDF',name:'Congolese Franc',flag:'🇨🇩'},{code:'CHF',name:'Swiss Franc',flag:'🇨🇭'},{code:'CLP',name:'Chilean Peso',flag:'🇨🇱'},{code:'CNY',name:'Chinese Yuan',flag:'🇨🇳'},{code:'COP',name:'Colombian Peso',flag:'🇨🇴'},{code:'CRC',name:'Costa Rican Colon',flag:'🇨🇷'},{code:'CUP',name:'Cuban Peso',flag:'🇨🇺'},{code:'CVE',name:'Cape Verdean Escudo',flag:'🇨🇻'},{code:'CZK',name:'Czech Koruna',flag:'🇨🇿'},{code:'DJF',name:'Djiboutian Franc',flag:'🇩🇯'},{code:'DKK',name:'Danish Krone',flag:'🇩🇰'},{code:'DOP',name:'Dominican Peso',flag:'🇩🇴'},{code:'DZD',name:'Algerian Dinar',flag:'🇩🇿'},{code:'EGP',name:'Egyptian Pound',flag:'🇪🇬'},{code:'ERN',name:'Eritrean Nakfa',flag:'🇪🇷'},{code:'ETB',name:'Ethiopian Birr',flag:'🇪🇹'},{code:'EUR',name:'Euro',flag:'🇪🇺'},{code:'FJD',name:'Fijian Dollar',flag:'🇫🇯'},{code:'GBP',name:'British Pound',flag:'🇬🇧'},{code:'GEL',name:'Georgian Lari',flag:'🇬🇪'},{code:'GHS',name:'Ghanaian Cedi',flag:'🇬🇭'},{code:'GMD',name:'Gambian Dalasi',flag:'🇬🇲'},{code:'GNF',name:'Guinean Franc',flag:'🇬🇳'},{code:'GTQ',name:'Guatemalan Quetzal',flag:'🇬🇹'},{code:'GYD',name:'Guyanese Dollar',flag:'🇬🇾'},{code:'HKD',name:'Hong Kong Dollar',flag:'🇭🇰'},{code:'HNL',name:'Honduran Lempira',flag:'🇭🇳'},{code:'HRK',name:'Croatian Kuna',flag:'🇭🇷'},{code:'HTG',name:'Haitian Gourde',flag:'🇭🇹'},{code:'HUF',name:'Hungarian Forint',flag:'🇭🇺'},{code:'IDR',name:'Indonesian Rupiah',flag:'🇮🇩'},{code:'ILS',name:'Israeli Shekel',flag:'🇮🇱'},{code:'INR',name:'Indian Rupee',flag:'🇮🇳'},{code:'IQD',name:'Iraqi Dinar',flag:'🇮🇶'},{code:'IRR',name:'Iranian Rial',flag:'🇮🇷'},{code:'ISK',name:'Icelandic Krona',flag:'🇮🇸'},{code:'JMD',name:'Jamaican Dollar',flag:'🇯🇲'},{code:'JOD',name:'Jordanian Dinar',flag:'🇯🇴'},{code:'JPY',name:'Japanese Yen',flag:'🇯🇵'},{code:'KES',name:'Kenyan Shilling',flag:'🇰🇪'},{code:'KGS',name:'Kyrgyzstani Som',flag:'🇰🇬'},{code:'KHR',name:'Cambodian Riel',flag:'🇰🇭'},{code:'KMF',name:'Comorian Franc',flag:'🇰🇲'},{code:'KPW',name:'North Korean Won',flag:'🇰🇵'},{code:'KRW',name:'South Korean Won',flag:'🇰🇷'},{code:'KWD',name:'Kuwaiti Dinar',flag:'🇰🇼'},{code:'KYD',name:'Cayman Islands Dollar',flag:'🇰🇾'},{code:'KZT',name:'Kazakhstani Tenge',flag:'🇰🇿'},{code:'LAK',name:'Laotian Kip',flag:'🇱🇦'},{code:'LBP',name:'Lebanese Pound',flag:'🇱🇧'},{code:'LKR',name:'Sri Lankan Rupee',flag:'🇱🇰'},{code:'LRD',name:'Liberian Dollar',flag:'🇱🇷'},{code:'LSL',name:'Lesotho Loti',flag:'🇱🇸'},{code:'LYD',name:'Libyan Dinar',flag:'🇱🇾'},{code:'MAD',name:'Moroccan Dirham',flag:'🇲🇦'},{code:'MDL',name:'Moldovan Leu',flag:'🇲🇩'},{code:'MGA',name:'Malagasy Ariary',flag:'🇲🇬'},{code:'MKD',name:'Macedonian Denar',flag:'🇲🇰'},{code:'MMK',name:'Myanmar Kyat',flag:'🇲🇲'},{code:'MNT',name:'Mongolian Tugrik',flag:'🇲🇳'},{code:'MOP',name:'Macanese Pataca',flag:'🇲🇴'},{code:'MRU',name:'Mauritanian Ouguiya',flag:'🇲🇷'},{code:'MUR',name:'Mauritian Rupee',flag:'🇲🇺'},{code:'MVR',name:'Maldivian Rufiyaa',flag:'🇲🇻'},{code:'MWK',name:'Malawian Kwacha',flag:'🇲🇼'},{code:'MXN',name:'Mexican Peso',flag:'🇲🇽'},{code:'MYR',name:'Malaysian Ringgit',flag:'🇲🇾'},{code:'MZN',name:'Mozambican Metical',flag:'🇲🇿'},{code:'NAD',name:'Namibian Dollar',flag:'🇳🇦'},{code:'NGN',name:'Nigerian Naira',flag:'🇳🇬'},{code:'NIO',name:'Nicaraguan Cordoba',flag:'🇳🇮'},{code:'NOK',name:'Norwegian Krone',flag:'🇳🇴'},{code:'NPR',name:'Nepalese Rupee',flag:'🇳🇵'},{code:'NZD',name:'New Zealand Dollar',flag:'🇳🇿'},{code:'OMR',name:'Omani Rial',flag:'🇴🇲'},{code:'PAB',name:'Panamanian Balboa',flag:'🇵🇦'},{code:'PEN',name:'Peruvian Sol',flag:'🇵🇪'},{code:'PGK',name:'Papua New Guinean Kina',flag:'🇵🇬'},{code:'PHP',name:'Philippine Peso',flag:'🇵🇭'},{code:'PKR',name:'Pakistani Rupee',flag:'🇵🇰'},{code:'PLN',name:'Polish Zloty',flag:'🇵🇱'},{code:'PYG',name:'Paraguayan Guarani',flag:'🇵🇾'},{code:'QAR',name:'Qatari Riyal',flag:'🇶🇦'},{code:'RON',name:'Romanian Leu',flag:'🇷🇴'},{code:'RSD',name:'Serbian Dinar',flag:'🇷🇸'},{code:'RUB',name:'Russian Ruble',flag:'🇷🇺'},{code:'RWF',name:'Rwandan Franc',flag:'🇷🇼'},{code:'SAR',name:'Saudi Riyal',flag:'🇸🇦'},{code:'SBD',name:'Solomon Islands Dollar',flag:'🇸🇧'},{code:'SCR',name:'Seychellois Rupee',flag:'🇸🇨'},{code:'SDG',name:'Sudanese Pound',flag:'🇸🇩'},{code:'SEK',name:'Swedish Krona',flag:'🇸🇪'},{code:'SGD',name:'Singapore Dollar',flag:'🇸🇬'},{code:'SLL',name:'Sierra Leonean Leone',flag:'🇸🇱'},{code:'SOS',name:'Somali Shilling',flag:'🇸🇴'},{code:'SRD',name:'Surinamese Dollar',flag:'🇸🇷'},{code:'STN',name:'Sao Tomean Dobra',flag:'🇸🇹'},{code:'SVC',name:'Salvadoran Colon',flag:'🇸🇻'},{code:'SYP',name:'Syrian Pound',flag:'🇸🇾'},{code:'SZL',name:'Swazi Lilangeni',flag:'🇸🇿'},{code:'THB',name:'Thai Baht',flag:'🇹🇭'},{code:'TJS',name:'Tajikistani Somoni',flag:'🇹🇯'},{code:'TMT',name:'Turkmenistani Manat',flag:'🇹🇲'},{code:'TND',name:'Tunisian Dinar',flag:'🇹🇳'},{code:'TOP',name:'Tongan Paanga',flag:'🇹🇴'},{code:'TRY',name:'Turkish Lira',flag:'🇹🇷'},{code:'TTD',name:'Trinidad & Tobago Dollar',flag:'🇹🇹'},{code:'TWD',name:'Taiwanese Dollar',flag:'🇹🇼'},{code:'TZS',name:'Tanzanian Shilling',flag:'🇹🇿'},{code:'UAH',name:'Ukrainian Hryvnia',flag:'🇺🇦'},{code:'UGX',name:'Ugandan Shilling',flag:'🇺🇬'},{code:'USD',name:'US Dollar',flag:'🇺🇸'},{code:'UYU',name:'Uruguayan Peso',flag:'🇺🇾'},{code:'UZS',name:'Uzbekistani Som',flag:'🇺🇿'},{code:'VES',name:'Venezuelan Bolivar',flag:'🇻🇪'},{code:'VND',name:'Vietnamese Dong',flag:'🇻🇳'},{code:'VUV',name:'Vanuatu Vatu',flag:'🇻🇺'},{code:'WST',name:'Samoan Tala',flag:'🇼🇸'},{code:'XAF',name:'Central African CFA Franc',flag:'🌍'},{code:'XOF',name:'West African CFA Franc',flag:'🌍'},{code:'YER',name:'Yemeni Rial',flag:'🇾🇪'},{code:'ZAR',name:'South African Rand',flag:'🇿🇦'},{code:'ZMW',name:'Zambian Kwacha',flag:'🇿🇲'},{code:'ZWL',name:'Zimbabwean Dollar',flag:'🇿🇼'}];
-let selectedFrom='PKR', selectedTo='OMR', rates={};
-function buildList(type,filter=''){
-  const listEl=document.getElementById(type+'List'); listEl.innerHTML='';
-  allCurrencies.filter(c=>(c.code+c.name).toLowerCase().includes(filter.toLowerCase())).forEach(c=>{
-    const div=document.createElement('div'); div.className='dropdown-item'+((type==='from'?selectedFrom:selectedTo)===c.code?' selected':'');
-    div.innerText=c.flag+' '+c.code+' - '+c.name; div.onclick=()=>{ selectCurrency(type,c.code,c.flag+' '+c.code+' - '+c.name); }; listEl.appendChild(div);
-  });
-}
+let selectedFrom='PKR',selectedTo='OMR',rates={};
+function buildList(type,filter=''){const listEl=document.getElementById(type+'List');listEl.innerHTML='';allCurrencies.filter(c=>(c.code+c.name).toLowerCase().includes(filter.toLowerCase())).forEach(c=>{const div=document.createElement('div');div.className='dropdown-item'+((type==='from'?selectedFrom:selectedTo)===c.code?' selected':'');div.innerText=c.flag+' '+c.code+' - '+c.name;div.onclick=()=>{selectCurrency(type,c.code,c.flag+' '+c.code+' - '+c.name);};listEl.appendChild(div);});}
 function toggleDropdown(type){const dd=document.getElementById(type+'Dropdown');document.querySelectorAll('.dropdown-list').forEach(el=>{if(el!==dd)el.classList.remove('open');});dd.classList.toggle('open');if(dd.classList.contains('open')){buildList(type);dd.querySelector('.search-box').focus();}}
 function filterList(type,val){buildList(type,val);}
 function selectCurrency(type,code,label){if(type==='from'){selectedFrom=code;document.querySelector('#fromWrapper .selected-display').innerText=label+' ▼';}else{selectedTo=code;document.querySelector('#toWrapper .selected-display').innerText=label+' ▼';}document.getElementById(type+'Dropdown').classList.remove('open');convertCurrency();}
-async function loadRates(){
-  const apis=['https://api.frankfurter.app/latest?from=USD','https://open.er-api.com/v6/latest/USD','https://api.exchangerate-api.com/v4/latest/USD'];
-  for(let url of apis){try{let res=await fetch(url);let data=await res.json();if(data.rates){rates=data.rates;rates['USD']=1;document.getElementById('rateStatus').innerHTML='✅ Live rates updated!';document.getElementById('rateInfo').innerText='Updated: '+new Date().toLocaleTimeString();setTimeout(()=>{document.getElementById('rateStatus').style.display='none';},3000);convertCurrency();return;}}catch(e){continue;}}
-  document.getElementById('rateStatus').innerHTML='⚠️ Offline rates use ho rahi hain';
-  rates={USD:1,PKR:278,EUR:0.92,GBP:0.79,AED:3.67,SAR:3.75,INR:83.5,CAD:1.36,AUD:1.53,JPY:149,CNY:7.24,CHF:0.89,KWD:0.31,QAR:3.64,OMR:0.38,TRY:32.5,BDT:110,MYR:4.7,SGD:1.34,NGN:1550,EGP:48,IQD:1309,IRR:42000,JOD:0.71,LBP:89500,LYD:4.83,MAD:10.1,TND:3.13,YER:250,DZD:134,SDG:601,ZAR:18.6,KES:129,GHS:15.3,TZS:2500,UGX:3750,ETB:56,XAF:600,XOF:600,ZMW:26};
-  convertCurrency();
-}
+async function loadRates(){const apis=['https://api.frankfurter.app/latest?from=USD','https://open.er-api.com/v6/latest/USD','https://api.exchangerate-api.com/v4/latest/USD'];for(let url of apis){try{let res=await fetch(url);let data=await res.json();if(data.rates){rates=data.rates;rates['USD']=1;document.getElementById('rateStatus').innerHTML='✅ Live rates updated!';document.getElementById('rateInfo').innerText='Updated: '+new Date().toLocaleTimeString();setTimeout(()=>{document.getElementById('rateStatus').style.display='none';},3000);convertCurrency();return;}}catch(e){continue;}}document.getElementById('rateStatus').innerHTML='⚠️ Offline rates use ho rahi hain';rates={USD:1,PKR:278,EUR:0.92,GBP:0.79,AED:3.67,SAR:3.75,INR:83.5,CAD:1.36,AUD:1.53,JPY:149,CNY:7.24,CHF:0.89,KWD:0.31,QAR:3.64,OMR:0.38,TRY:32.5,BDT:110,MYR:4.7,SGD:1.34,NGN:1550,EGP:48,IQD:1309,IRR:42000,JOD:0.71,LBP:89500,LYD:4.83,MAD:10.1,TND:3.13,YER:250,DZD:134,SDG:601,ZAR:18.6,KES:129,GHS:15.3,TZS:2500,UGX:3750,ETB:56,XAF:600,XOF:600,ZMW:26};convertCurrency();}
 function convertCurrency(){let v=parseFloat(document.getElementById('valueCurr').value);if(isNaN(v)||!rates.USD)return;let inUSD=v/rates[selectedFrom];let result=inUSD*rates[selectedTo];document.getElementById('resultCurr').innerText=result.toFixed(4)+' '+selectedTo;document.getElementById('rateInfo').innerText='1 '+selectedFrom+' = '+(rates[selectedTo]/rates[selectedFrom]).toFixed(6)+' '+selectedTo;}
 loadRates(); setInterval(loadRates,600000);
 
-// ===== WHATSAPP — FIXED ✅ =====
-const WA_NUMBER = '923040073535'; // Pakistan: 92 + 3040073535
-
-document.getElementById('waBtn').addEventListener('click', function(){
-  const msg = encodeURIComponent('Salam! CalcFlash app ke baare mein rabta karna tha.');
-  const url = 'https://wa.me/' + WA_NUMBER + '?text=' + msg;
-  try {
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch(e) {
-    window.location.href = url;
-  }
-});
+// ===== WHATSAPP =====
+const WA_NUMBER='923040073535';
+document.getElementById('waBtn').addEventListener('click',function(){const msg=encodeURIComponent('Salam! CalcFlash app ke baare mein rabta karna tha.');const url='https://wa.me/'+WA_NUMBER+'?text='+msg;try{const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';document.body.appendChild(link);link.click();document.body.removeChild(link);}catch(e){window.location.href=url;}});
 </script>
 </body>
 </html>
